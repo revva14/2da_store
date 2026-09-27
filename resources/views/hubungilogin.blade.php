@@ -71,32 +71,6 @@
     display:flex;
     flex-direction:column;
   }
-  .hubungi-page .info-card-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-  }
-  .hubungi-page .info-icon{
-    width:46px;height:46px;
-    border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:20px;
-  }
-  .hubungi-page .icon-green{ background:#dcefc9; }
-  .hubungi-page .icon-peach{ background:var(--peach-bg); }
-  .hubungi-page .icon-orange{ background:var(--peach-bg); }
-
-  .hubungi-page .info-chip{
-    font-size:11px;
-    font-weight:700;
-    padding:5px 12px;
-    border-radius:999px;
-  }
-  .hubungi-page .chip-online{ background:var(--green-bg); color:var(--green); }
-  .hubungi-page .chip-katering{ background:var(--yellow-bg); color:#8a6a12; }
-  .hubungi-page .chip-dapur{ background:var(--peach-bg); color:#a15a1c; }
-
   .hubungi-page .info-card h3{ font-size:19px; font-weight:800; margin-bottom:10px; }
   .hubungi-page .info-card p{ font-size:14px; color:var(--text-muted); line-height:1.6; flex:1; margin-bottom:20px; }
 
@@ -175,7 +149,7 @@
   }
   .hubungi-page .input-icon input, .hubungi-page .input-icon select{
     width:100%;
-    padding:13px 14px 13px 40px;
+    padding:13px 14px;
     border:1px solid var(--border);
     border-radius:12px;
     background:var(--white);
@@ -218,40 +192,6 @@
     margin-bottom:26px;
   }
   .hubungi-page .send-btn:hover{ background:var(--orange-dark); }
-
-  .hubungi-page .location-row{
-    display:flex;
-    gap:14px;
-    background:var(--white);
-    border-radius:14px;
-    padding:14px;
-    align-items:center;
-    cursor:pointer;
-  }
-  .hubungi-page .location-row img{
-    width:56px;height:56px;
-    border-radius:10px;
-    object-fit:cover;
-    flex-shrink:0;
-  }
-  .hubungi-page .location-row .loc-label{
-    font-size:11px;
-    font-weight:700;
-    color:var(--orange-dark);
-    letter-spacing:.4px;
-    margin-bottom:2px;
-  }
-  .hubungi-page .location-row h4{ font-size:15px; font-weight:700; margin-bottom:2px; }
-  .hubungi-page .location-row p{ font-size:12.5px; color:var(--text-muted); }
-  .hubungi-page .location-row .chevron{ margin-left:auto; color:var(--text-muted); transition:transform .2s ease; }
-  .hubungi-page .location-row.open .chevron{ transform:rotate(180deg); }
-  .hubungi-page .location-extra{
-    display:none;
-    padding:14px 14px 4px;
-    font-size:13px;
-    color:var(--text-muted);
-  }
-  .hubungi-page .location-extra.show{ display:block; }
 
   /* FAQ card */
   .hubungi-page .faq-card{
@@ -347,33 +287,21 @@
 
   <div class="info-cards">
     <div class="info-card reveal">
-      <div class="info-card-top">
-        <div class="info-icon icon-green">💬</div>
-        <span class="info-chip chip-online">● ONLINE SEKARANG</span>
-      </div>
       <h3>Chat Admin WhatsApp</h3>
       <p>Respon cepat dalam 5–10 menit untuk bantuan pesanan langsung hari ini, ketersediaan menu favorit, atau pengantaran kilat.</p>
-      <a class="info-btn btn-green" href="https://wa.me/6283129656507" target="_blank">📞 Hubungi WA: 0831-2965-6507</a>
+      <a class="info-btn btn-green" href="https://wa.me/6283129656507" target="_blank">Hubungi WA: 0831-2965-6507</a>
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card-top">
-        <div class="info-icon icon-peach">🎉</div>
-        <span class="info-chip chip-katering">DISKON KATERING</span>
-      </div>
       <h3>Pesanan Jumlah Besar / Event</h3>
       <p>Pesan paket snack box corndog leleh &amp; cireng renyah kenyal untuk pesta ulang tahun, arisan keluarga, atau meeting kantor.</p>
-      <a class="info-btn btn-brown" href="https://wa.me/6283129656507" target="_blank">🏷 Konsultasi Katering</a>
+      <a class="info-btn btn-brown" href="https://wa.me/6283129656507" target="_blank">Konsultasi Katering</a>
     </div>
 
     <div class="info-card reveal">
-      <div class="info-card-top">
-        <div class="info-icon icon-orange">🏪</div>
-        <span class="info-chip chip-dapur">DAPUR PUSAT TEBET</span>
-      </div>
       <h3>Outlet &amp; Jam Buka</h3>
       <p>Jl. Tebet Raya No. 45, Jakarta Selatan. Buka setiap hari pukul 10.00 – 21.00 WIB untuk takeaway dan ojek online.</p>
-      <a class="info-btn btn-peach" href="https://maps.google.com" target="_blank">📍 Buka di Google Maps</a>
+      <a class="info-btn btn-peach" href="https://maps.google.com" target="_blank">Buka di Google Maps</a>
     </div>
   </div>
 
@@ -381,7 +309,7 @@
 
     <!-- Form kirim pesan -->
     <div class="contact-form-card reveal">
-      <h2>✉️ Kirim Pesan Cepat ke Admin</h2>
+      <h2>Kirim Pesan Cepat ke Admin</h2>
       <p>Ada komplain atau butuh penawaran custom? Tinggalkan detail di bawah, admin kami akan segera merespon via email atau WhatsApp.</p>
 
       <form id="contactForm">
@@ -389,14 +317,12 @@
           <div>
             <label class="field-label">Nama Kamu <span class="req">*</span></label>
             <div class="input-icon">
-              <span>👤</span>
               <input type="text" id="namaKamu" placeholder="Contoh: Budi Santoso">
             </div>
           </div>
           <div>
             <label class="field-label">Email / No WhatsApp <span class="req">*</span></label>
             <div class="input-icon">
-              <span>🪪</span>
               <input type="text" id="kontak" placeholder="0812xxxx atau nama@email.com">
             </div>
           </div>
@@ -405,7 +331,6 @@
         <div class="field-block">
           <label class="field-label">Kategori Pertanyaan <span class="req">*</span></label>
           <div class="input-icon">
-            <span>🏷</span>
             <select id="kategori">
               <option value="" selected disabled>Pilih kategori kebutuhanmu...</option>
               <option value="pesanan">Status Pesanan</option>
@@ -421,21 +346,8 @@
           <textarea id="detailPesan" placeholder="Tuliskan nomor pesanan, tanggal acara, atau hal yang ingin kamu tanyakan..."></textarea>
         </div>
 
-        <button type="submit" class="send-btn">➤ Kirim Pesan ke Admin</button>
+        <button type="submit" class="send-btn">Kirim Pesan ke Admin</button>
       </form>
-
-      <div class="location-row" id="locationRow">
-        <img src="{{ asset('images/lokasi-kami.png') }}" alt="Lokasi Kami">
-        <div>
-          <div class="loc-label">LOKASI KAMI</div>
-          <h4>Kitchen &amp; Pickup Counter Tebet</h4>
-          <p>Melayani pesanan online GrabFood, GoFood, ShopeeFood, dan pickup langsung.</p>
-        </div>
-        <span class="chevron">⌄</span>
-      </div>
-      <div class="location-extra" id="locationExtra">
-        Alamat lengkap: Jl. Tebet Raya No. 45, Jakarta Selatan. Buka setiap hari pukul 10.00 – 21.00 WIB.
-      </div>
     </div>
 
     <!-- FAQ + Testimoni -->
@@ -489,7 +401,7 @@
           "Admin WhatsApp ramah banget pas pesen 60 box corndog mozza buat event kampus. Tepat waktu, masih anget renyah, dan dapet bonus extra saus. Recommended!"
         </blockquote>
         <div class="testimonial-author">
-          <img src="{{ asset('images/nadia-omara.png') }}" alt="Nadia Omara">
+          <img src="{{ asset('images/profil-reva.jpg') }}" alt="Nadia Omara">
           <div>
             <div class="name">Nadia Omara</div>
             <div class="role">Koordinator Acara BEM UI</div>
@@ -498,7 +410,6 @@
       </div>
 
       <div class="problem-note reveal">
-        <span class="bolt">⚡</span>
         <div>
           <strong>Pesanan Bermasalah?</strong><br>
           Hubungi hotline instan CS: <a href="tel:+6283129656507">0831-2965-6507</a> untuk retur atau refund cepat.
@@ -531,14 +442,6 @@
         answer.style.maxHeight = answer.scrollHeight + "px";
       }
     });
-  });
-
-  // Location row toggle
-  const locationRow = document.getElementById("locationRow");
-  const locationExtra = document.getElementById("locationExtra");
-  locationRow.addEventListener("click", () => {
-    locationRow.classList.toggle("open");
-    locationExtra.classList.toggle("show");
   });
 
   // Contact form submit

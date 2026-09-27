@@ -4,6 +4,9 @@
 
 @php
   $currentLocale = app()->getLocale();
+  // fallback: kalau key belum ada di lang/pengaturan.php, pakai teks default ini
+  // (biar tidak tampil mentah seperti "pengaturan.current_password_ph")
+  $pt = fn($key, $default) => \Illuminate\Support\Facades\Lang::has('pengaturan.'.$key) ? __('pengaturan.'.$key) : $default;
 @endphp
 
 @push('styles')
@@ -289,12 +292,26 @@
     font-size:12.5px;
     color: var(--ink-soft);
   }
-  .strength-row .label strong{ color:#4f7a35; font-weight:700; }
-  .strength-bars{ display:flex; gap:5px; }
   .strength-bars span{
     width:34px; height:5px;
     border-radius:3px;
-    background:#c9e2b3;
+    background:#e6d6c8;
+    transition: background .2s ease;
+  }
+  .strength-bars span.filled.weak{ background:#e74c3c; }
+  .strength-bars span.filled.medium{ background:#e0a83e; }
+  .strength-bars span.filled.strong{ background:#8bc34a; }
+  .strength-bars span.filled.very-strong{ background:#4f7a35; }
+  .strength-row .label strong{ font-weight:700; }
+  .strength-row .label strong.weak{ color:#c0392b; }
+  .strength-row .label strong.medium{ color:#b9770e; }
+  .strength-row .label strong.strong{ color:#5f9a3b; }
+  .strength-row .label strong.very-strong{ color:#4f7a35; }
+
+  .field-error{
+    font-size:11.5px;
+    color:#c0392b;
+    margin:-16px 0 18px;
   }
 
   .settings-card .actions-end{
@@ -422,52 +439,8 @@
       <div class="account-grid">
 
         <!-- SIDEBAR -->
-        <aside>
-          <div class="profile-card">
-            <div class="profile-avatar">
-              <img src="{{ asset('images/profil-reva.jpg') }}" alt="{{ __('pengaturan.avatar_alt', ['name' => 'Reva Aulia A.']) }}">
-            </div>
-            <h2 class="profile-name">Reva Aulia A.</h2>
-            <p class="profile-email">revanjai@email.com</p>
-            <span class="profile-badge">{{ __('pengaturan.joined') }}</span>
-
-            <div class="profile-stats">
-              <div class="stat-box">
-                <span class="stat-label">{{ __('pengaturan.total_orders') }}</span>
-                <span class="stat-value">{{ __('pengaturan.menu_count', ['count' => 38]) }}</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">{{ __('pengaturan.coupon_savings') }}</span>
-                <span class="stat-value accent">{{ __('pengaturan.coupon_value') }}</span>
-              </div>
-            </div>
-          </div>
-
-          <nav class="account-menu">
-            <a href="/biodata" class="account-menu-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              {{ __('pengaturan.menu_biodata') }}
-            </a>
-            <a href="/alamat" class="account-menu-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              {{ __('pengaturan.menu_address') }}
-            </a>
-            <a href="/riwayat" class="account-menu-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
-              {{ __('pengaturan.menu_history') }}
-              <svg class="menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-            <a href="/pengaturan" class="account-menu-item active">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-              {{ __('pengaturan.menu_settings') }}
-              <svg class="menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-            <a href="/logout" class="account-menu-item logout">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-              {{ __('pengaturan.menu_logout') }}
-            </a>
-          </nav>
-        </aside>
+        {{-- totalPesanan: dummy sementara, samakan dgn jumlah $orders di route /riwayat (web.php) --}}
+        @include('partials.sidebarakun', ['active' => 'pengaturan', 'totalPesanan' => 5])
 
         <!-- MAIN -->
         <div class="account-main">
@@ -482,48 +455,59 @@
             <div class="settings-block-title">{{ __('pengaturan.change_password') }}</div>
             <p class="settings-block-desc">{{ __('pengaturan.password_rule') }}</p>
 
-            <label class="field-label">{{ __('pengaturan.current_password') }}</label>
-            <div class="password-field">
-              <input type="password" value="passwordlama" readonly>
-              <button type="button" class="toggle-eye" data-target-eye>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.86 21.86 0 0 1 5.06-6.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.82 21.82 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-              </button>
-            </div>
+            <form action="{{ url('/akun/password') }}" method="POST" id="formUbahSandi">
+              @csrf
+              @method('PUT')
 
-            <div class="password-grid">
-              <div>
-                <label class="field-label">{{ __('pengaturan.new_password') }}</label>
-                <div class="password-field" style="margin-bottom:0;">
-                  <input type="password" placeholder="{{ __('pengaturan.new_password_ph') }}">
-                  <button type="button" class="toggle-eye" data-target-eye>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  </button>
+              <label class="field-label">{{ __('pengaturan.current_password') }}</label>
+              <div class="password-field">
+                <input type="password" name="current_password" placeholder="{{ $pt('current_password_ph', '••••••••••••') }}" autocomplete="current-password" required>
+                <button type="button" class="toggle-eye" data-target-eye>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.86 21.86 0 0 1 5.06-6.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.82 21.82 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+              @error('current_password')
+                <p class="field-error">{{ $message }}</p>
+              @enderror
+
+              <div class="password-grid">
+                <div>
+                  <label class="field-label">{{ __('pengaturan.new_password') }}</label>
+                  <div class="password-field" style="margin-bottom:0;">
+                    <input type="password" name="password" id="passwordBaru" placeholder="{{ __('pengaturan.new_password_ph') }}" autocomplete="new-password" required>
+                    <button type="button" class="toggle-eye" data-target-eye>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                  </div>
+                  @error('password')
+                    <p class="field-error">{{ $message }}</p>
+                  @enderror
+                </div>
+                <div>
+                  <label class="field-label">{{ __('pengaturan.confirm_password') }}</label>
+                  <div class="password-field" style="margin-bottom:0;">
+                    <input type="password" name="password_confirmation" placeholder="{{ __('pengaturan.confirm_password_ph') }}" autocomplete="new-password" required>
+                    <button type="button" class="toggle-eye" data-target-eye>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div>
-                <label class="field-label">{{ __('pengaturan.confirm_password') }}</label>
-                <div class="password-field" style="margin-bottom:0;">
-                  <input type="password" placeholder="{{ __('pengaturan.confirm_password_ph') }}">
-                  <button type="button" class="toggle-eye" data-target-eye>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  </button>
+
+              <div class="strength-row" style="margin-top:22px;">
+                <span class="label" id="strengthLabelWrap" style="display:none;">{{ __('pengaturan.strength_label') }}: <strong id="strengthText"></strong></span>
+                <div class="strength-bars" id="strengthBars">
+                  <span></span><span></span><span></span><span></span>
                 </div>
               </div>
-            </div>
 
-            <div class="strength-row" style="margin-top:22px;">
-              <span class="label">{{ __('pengaturan.strength_label') }}: <strong>{{ __('pengaturan.strength_value') }}</strong></span>
-              <div class="strength-bars">
-                <span></span><span></span><span></span><span></span>
+              <div class="actions-end">
+                <button type="submit" class="btn-primary-sm">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                  {{ __('pengaturan.update_password') }}
+                </button>
               </div>
-            </div>
-
-            <div class="actions-end">
-              <button type="button" class="btn-primary-sm">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                {{ __('pengaturan.update_password') }}
-              </button>
-            </div>
+            </form>
           </div>
 
           <!-- AKUN TERHUBUNG -->
@@ -545,7 +529,7 @@
                     {{ __('pengaturan.connected_status') }}
                   </span>
                 </div>
-                <p class="value">siti.rahmawati@email.com</p>
+                <p class="value">{{ auth()->user()->email }}</p>
                 <p class="desc">{{ __('pengaturan.google_desc') }}</p>
                 <div class="connected-item-footer">
                   <span class="muted">{{ __('pengaturan.auto_synced') }}</span>
@@ -568,7 +552,7 @@
                     {{ __('pengaturan.connected_status') }}
                   </span>
                 </div>
-                <p class="value">+62 813-8899-7721</p>
+                <p class="value">{{ auth()->user()->phone }}</p>
                 <p class="desc">{{ __('pengaturan.whatsapp_desc') }}</p>
                 <div class="connected-item-footer">
                   <span class="muted">{{ __('pengaturan.verification_active') }}</span>
@@ -588,7 +572,7 @@
             <div class="privacy-row">
               <div>
                 <p class="title">{{ __('pengaturan.download_title') }}</p>
-                <p class="desc">{{ __('pengaturan.download_desc', ['orders' => 38]) }}</p>
+                <p class="desc">{{ __('pengaturan.download_desc', ['orders' => auth()->user()->transaksi()->count()]) }}</p>
               </div>
               <a href="/akun/arsip" class="btn-outline-sm">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -625,5 +609,53 @@
       input.type = input.type === 'password' ? 'text' : 'password';
     });
   });
+
+  // Indikator kekuatan kata sandi baru (dihitung live, bukan statis)
+  (function () {
+    var input = document.getElementById('passwordBaru');
+    if (!input) return;
+
+    var labelWrap = document.getElementById('strengthLabelWrap');
+    var textEl = document.getElementById('strengthText');
+    var bars = document.querySelectorAll('#strengthBars span');
+
+    function scorePassword(val) {
+      var score = 0;
+      if (val.length >= 8) score++;
+      if (/[a-z]/.test(val)) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+      return score;
+    }
+
+    function render() {
+      var val = input.value;
+
+      bars.forEach(function (b) { b.className = ''; });
+
+      if (!val) {
+        labelWrap.style.display = 'none';
+        return;
+      }
+
+      var score = scorePassword(val);
+      var level, filled, cls;
+      if (score <= 1) { level = 'Lemah'; filled = 1; cls = 'weak'; }
+      else if (score === 2) { level = 'Sedang'; filled = 2; cls = 'medium'; }
+      else if (score <= 4) { level = 'Kuat'; filled = 3; cls = 'strong'; }
+      else { level = 'Sangat Kuat'; filled = 4; cls = 'very-strong'; }
+
+      labelWrap.style.display = '';
+      textEl.textContent = level;
+      textEl.className = cls;
+      bars.forEach(function (b, i) {
+        b.className = i < filled ? 'filled ' + cls : '';
+      });
+    }
+
+    input.addEventListener('input', render);
+    render();
+  })();
 </script>
 @endpush

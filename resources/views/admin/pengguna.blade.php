@@ -164,16 +164,11 @@
 </head>
 <body>
 @php
-    // Data pengguna (statis sesuai desain). Ganti dengan data dari controller bila sudah siap.
-    $pengguna = [
-        ['id' => 1, 'nama' => 'Anisa Rahmawati', 'ini' => 'AR', 'foto' => 'images/users/anisa.jpg', 'email' => 'anisa.rahma@gmail.com',    'hp' => '0812-9844-3211', 'root' => false, 'admin' => false, 'reg' => '14 Jan 2024', 'status' => 'aktif', 'blok' => false],
-        ['id' => 2, 'nama' => 'Fajar Hidayat',   'ini' => 'FH', 'foto' => 'images/users/fajar.jpg', 'email' => 'fajar.manager@2dastore.id', 'hp' => '0811-3344-9…',   'root' => false, 'admin' => true,  'reg' => '10 Okt 2023', 'status' => 'aktif', 'blok' => false],
-        ['id' => 3, 'nama' => 'Siti Kusuma',     'ini' => 'SK', 'foto' => null, 'email' => 'siti.k@yahoo.com',           'hp' => '0878-5544-3321', 'root' => false, 'admin' => false, 'reg' => '22 Feb 2024', 'status' => 'aktif', 'blok' => false],
-        ['id' => 4, 'nama' => 'Rian Anggoro',    'ini' => 'RA', 'foto' => null, 'email' => 'rian.fake@mail.com',         'hp' => '0899-2314-1100', 'root' => false, 'admin' => false, 'reg' => '01 Mar 2024', 'status' => 'blok', 'blok' => true],
-        ['id' => 5, 'nama' => 'Budi Santoso (Anda)', 'ini' => 'BS', 'foto' => null, 'email' => 'owner@2dastore.id',      'hp' => '0811-2233-4455', 'root' => true,  'admin' => true,  'reg' => '01 Jan 2023', 'status' => 'aktif', 'blok' => false],
-    ];
+    // $pengguna sekarang dikirim dari App\Http\Controllers\Admin\PenggunaController@index
+    // (data asli dari tabel users), bukan array statis lagi.
 
     // Jumlah untuk label tab, dihitung dari data di atas
+
     $jmlSemua     = count($pengguna);
     $jmlAdmin     = count(array_filter($pengguna, fn ($u) => $u['admin']));
     $jmlPengguna  = $jmlSemua - $jmlAdmin;
@@ -204,18 +199,18 @@
             <div class="card stat">
                 <div class="stat-top">
                     <div class="sico a"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3"/><circle cx="5" cy="10" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M6.5 20c0-3 2.5-5 5.5-5s5.500 2 5.500 5"/></svg></div>
-                    <span class="chip a">+12% bln lalu</span>
+                    <span class="chip a">{{ $pertumbuhanPelanggan >= 0 ? '+' : '' }}{{ $pertumbuhanPelanggan }}% bln lalu</span>
                 </div>
-                <div class="num">1.240</div>
+                <div class="num">{{ $fmt($totalPelanggan) }}</div>
                 <div class="lbl">Total Pelanggan Terdaftar</div>
-                <div class="prog"><span style="width:50%"></span></div>
+                <div class="prog"><span style="width:{{ $progPersen }}%"></span></div>
             </div>
             <div class="card stat">
                 <div class="stat-top">
                     <div class="sico b"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c1 4 5 5 5 10a5 5 0 01-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/></svg></div>
-                    <span class="chip b">72.1% Retensi</span>
+                    <span class="chip b">{{ $retensiPersen }}% Retensi</span>
                 </div>
-                <div class="num">895</div>
+                <div class="num">{{ $fmt($penggunaAktif) }}</div>
                 <div class="lbl">Pengguna Aktif Bulan Ini</div>
                 <div class="note"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 17l6-6 4 4 8-8"/></svg>Interaksi checkout &gt; 1× kali</div>
             </div>
@@ -224,14 +219,14 @@
                     <div class="sico c"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.500 3-6 6.500-6s6.500 2.500 6.500 6"/><path d="M19 8v6M16 11h6"/></svg></div>
                     <span class="chip c">Minggu Ini</span>
                 </div>
-                <div class="num">+74</div>
+                <div class="num">+{{ $fmt($baruMingguIni) }}</div>
                 <div class="lbl">Pelanggan Baru Sign-up</div>
             </div>
             <div class="card stat">
                 <div class="stat-top">
                     <div class="sico d"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="9" cy="12" r="2"/><path d="M6 17c0-1.500 1.500-2.500 3-2.500s3 1 3 2.500M15 11h3M15 15h3M9 3v3M15 3v3"/></svg></div>
                 </div>
-                <div class="num">2</div>
+                <div class="num">{{ $fmt($totalAdmin) }}</div>
                 <div class="lbl">Total Akun Admin Toko</div>
             </div>
         </section>
@@ -373,6 +368,28 @@
     }
 
     function angka(n) { return Number(n).toLocaleString('id-ID'); }
+
+    // ===== Kirim perubahan role / blokir ke server =====
+    var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').content;
+
+    function kirim(url, body) {
+        return fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': CSRF_TOKEN
+            },
+            body: JSON.stringify(body)
+        }).then(function (res) {
+            if (!res.ok) {
+                return res.json().catch(function () { return {}; }).then(function (data) {
+                    throw new Error(data.message || 'Gagal menyimpan perubahan');
+                });
+            }
+            return res.json();
+        });
+    }
 
     // Ambil data tiap baris dari atribut data-* sekali saja
     var items = Array.prototype.slice.call(tbody.querySelectorAll('tr[data-i]')).map(function (tr) {
@@ -675,8 +692,14 @@
             box.appendChild(grup);
         }, 'Simpan', function () {
             if (pilih === awal) { toast('Role tidak berubah'); return; }
-            setRole(tr, u, pilih === 'admin');
-            toast('Role diubah menjadi ' + (pilih === 'admin' ? 'Admin' : 'Pengguna'));
+            var admin = pilih === 'admin';
+            kirim('/admin/pengguna/' + u.id + '/role', { admin: admin }).then(function () {
+                setRole(tr, u, admin);
+                toast('Role diubah menjadi ' + (admin ? 'Admin' : 'Pengguna'));
+                setTimeout(function () { window.location.reload(); }, 700);
+            }).catch(function (err) {
+                toast(err.message || 'Gagal mengubah role, coba lagi');
+            });
         });
     }
 
@@ -687,8 +710,13 @@
             p.textContent = 'Status akun ' + u.nama + ' akan diubah menjadi ' + (blok ? 'Diblokir.' : 'Aktif.');
             box.appendChild(p);
         }, blok ? 'Ya, blokir' : 'Ya, aktifkan', function () {
-            setBlokir(tr, u, blok);
-            toast(blok ? 'Akun diblokir' : 'Akun diaktifkan kembali');
+            kirim('/admin/pengguna/' + u.id + '/blokir', { blokir: blok }).then(function () {
+                setBlokir(tr, u, blok);
+                toast(blok ? 'Akun diblokir' : 'Akun diaktifkan kembali');
+                setTimeout(function () { window.location.reload(); }, 700);
+            }).catch(function (err) {
+                toast(err.message || 'Gagal mengubah status akun, coba lagi');
+            });
         }, blok);
     }
 

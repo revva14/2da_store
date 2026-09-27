@@ -4,216 +4,11 @@
 
 @section('content')
 @php
-    // Gambar diambil dari public/images/
-    $reviews = [
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/corndog.jpg'),
-            'cat'      => 'Corndog',
-            'group'    => 'corndog',
-            'rating'   => 5,
-            'icon'     => 'fork',
-            'time'     => '1 jam lalu',
-            'initials' => 'DP',
-            'green'    => false,
-            'name'     => 'Dimas Prasetyo',
-            'role'     => 'Pecinta Corndog',
-            'text'     => 'Corndognya besar dan lapisan tepungnya garing keemasan. Saus sambal dan mayonesnya banyak, jadi rasa gurih, manis, dan pedasnya nyatu. Sosisnya juicy, satu tusuk saja sudah bikin kenyang. Nagih parah!',
-            'helpful'  => 38,
-            'order'    => '3 Tusuk',
-        ],
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/cireng.jpg'),
-            'cat'      => 'Cireng Isi',
-            'group'    => 'cireng',
-            'rating'   => 5,
-            'icon'     => 'fork',
-            'time'     => '3 jam lalu',
-            'initials' => 'RS',
-            'green'    => true,
-            'name'     => 'Rina Setyowati',
-            'role'     => 'Pelanggan Setia Surabaya',
-            'text'     => 'Cirengnya digoreng garing, kulitnya renyah tapi bagian dalamnya tetap empuk. Isiannya melimpah dan bumbunya terasa. Paling enak dimakan selagi hangat. Selalu repeat order tiap Jumat.',
-            'helpful'  => 52,
-            'order'    => '2 Porsi',
-        ],
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/mojito.jpg'),
-            'cat'      => 'Mojito',
-            'group'    => 'minuman',
-            'rating'   => 5,
-            'icon'     => 'cup',
-            'time'     => '5 jam lalu',
-            'initials' => 'NP',
-            'green'    => false,
-            'name'     => 'Nabila Putri',
-            'role'     => 'Pecinta Minuman Segar',
-            'text'     => 'Mojitonya segar banget! Ada pilihan rasa kuning, merah, biru, sampai oranye, warnanya cantik buat difoto. Manisnya pas dan dingin banget diminum siang hari. Cocok dipasangkan sama gorengan.',
-            'helpful'  => 44,
-            'order'    => '4 Gelas',
-        ],
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/corndog2.jpg'),
-            'cat'      => 'Corndog Crispy',
-            'group'    => 'corndog',
-            'rating'   => 5,
-            'icon'     => 'fork',
-            'time'     => 'Kemarin',
-            'initials' => 'KK',
-            'green'    => false,
-            'name'     => 'Kak Kevin',
-            'role'     => 'Foodie Jakarta',
-            'text'     => 'Tepung panirnya tebal dan garing, isian sosisnya padat dan gurih. Disajikan bareng saus cocolan dan irisan kol segar jadi tidak enek. Cocok buat camilan sore bareng teman.',
-            'helpful'  => 19,
-            'order'    => '5 Tusuk',
-        ],
-        [
-            'type'     => 'text',
-            'cat'      => 'Es Coklat',
-            'group'    => 'minuman',
-            'rating'   => 4,
-            'icon'     => 'cup',
-            'time'     => '2 hari lalu',
-            'initials' => 'FN',
-            'green'    => false,
-            'name'     => 'Fajar Nugroho',
-            'badge'    => '3 Gelas',
-            'text'     => 'Es coklat blendernya kental, rasa coklatnya kuat dan dinginnya pas. Ukuran gelasnya lumayan besar jadi puas. Semoga ke depannya ada pilihan level manis biar bisa disesuaikan.',
-        ],
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/maryam.jpg'),
-            'cat'      => 'Roti Maryam',
-            'group'    => 'roti',
-            'rating'   => 5,
-            'icon'     => 'cake',
-            'time'     => '3 hari lalu',
-            'initials' => 'RR',
-            'green'    => false,
-            'name'     => 'Rizky Ramadhan',
-            'role'     => 'Sweet Tooth Hunter',
-            'text'     => 'Roti maryamnya berlapis-lapis, empuk tapi tetap garing di pinggirnya. Taburan keju dan coklatnya banyak, manis dan gurihnya seimbang. Fix wajib repeat order!',
-            'helpful'  => 31,
-            'order'    => '2 Porsi',
-        ],
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/tahu.jpg'),
-            'cat'      => 'Tahu Crispy',
-            'group'    => 'goreng',
-            'rating'   => 4,
-            'icon'     => 'chef',
-            'time'     => '4 hari lalu',
-            'initials' => 'SM',
-            'green'    => false,
-            'name'     => 'Sinta Maharani',
-            'role'     => 'Pecinta Camilan Pedas',
-            'text'     => 'Tahu crispy-nya potongannya kecil-kecil dan garing, bumbunya melimpah dan gurih. Cuma pedasnya kurang buat aku, tapi tetap enak dan porsinya banyak. Pas buat teman nonton.',
-            'helpful'  => 27,
-            'order'    => '2 Porsi',
-        ],
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/kentang.jpg'),
-            'cat'      => 'Kentang Goreng',
-            'group'    => 'goreng',
-            'rating'   => 5,
-            'icon'     => 'chef',
-            'time'     => '5 hari lalu',
-            'initials' => 'AR',
-            'green'    => false,
-            'name'     => 'Aulia Rahma',
-            'role'     => 'Anak Kos Bandung',
-            'text'     => 'Kentang gorengnya panjang-panjang, renyah di luar dan lembut di dalam. Saus tomatnya dipisah jadi tetap garing sampai rumah. Porsinya banyak dan harganya ramah buat anak kos.',
-            'helpful'  => 22,
-            'order'    => '3 Porsi',
-        ],
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/jus.jpg'),
-            'cat'      => 'Jus Buah',
-            'group'    => 'minuman',
-            'rating'   => 5,
-            'icon'     => 'cup',
-            'time'     => '6 hari lalu',
-            'initials' => 'TL',
-            'green'    => true,
-            'name'     => 'Tania Lestari',
-            'role'     => 'Pecinta Minuman Segar',
-            'text'     => 'Jusnya segar, rasa buahnya asli dan tidak terlalu manis. Sudah coba jus jeruk, tomat, dan kiwi, semuanya enak. Diminum siang-siang pas panas rasanya pas banget.',
-            'helpful'  => 35,
-            'order'    => '3 Gelas',
-        ],
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/tempura.jpg'),
-            'cat'      => 'Tempura',
-            'group'    => 'goreng',
-            'rating'   => 5,
-            'icon'     => 'chef',
-            'time'     => '1 minggu lalu',
-            'initials' => 'GP',
-            'green'    => false,
-            'name'     => 'Gilang Pratama',
-            'role'     => 'Pemburu Gorengan',
-            'text'     => 'Potongan tempuranya garing dan bumbunya meresap sampai dalam. Disajikan dalam box lengkap dengan tusuk, jadi praktis dimakan. Gurih dan agak pedas, pas buat ngemil.',
-            'helpful'  => 18,
-            'order'    => '1 Box',
-        ],
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/pao.jpg'),
-            'cat'      => 'Bakpao',
-            'group'    => 'roti',
-            'rating'   => 5,
-            'icon'     => 'cake',
-            'time'     => '1 minggu lalu',
-            'initials' => 'DA',
-            'green'    => true,
-            'name'     => 'Dewi Anggraini',
-            'role'     => 'Ibu Rumah Tangga',
-            'text'     => 'Bakpaonya putih, empuk, dan masih hangat waktu sampai. Isian coklatnya manis dan legit. Anak-anak sampai rebutan. Enak buat sarapan atau camilan sore.',
-            'helpful'  => 29,
-            'order'    => '6 Pcs',
-        ],
-        [
-            'type'     => 'photo',
-            'img'      => asset('images/jamur.jpg'),
-            'cat'      => 'Jamur Crispy',
-            'group'    => 'goreng',
-            'rating'   => 4,
-            'icon'     => 'chef',
-            'time'     => '2 minggu lalu',
-            'initials' => 'YA',
-            'green'    => false,
-            'name'     => 'Yoga Aditya',
-            'role'     => 'Foodie Malang',
-            'text'     => 'Jamur crispy-nya renyah banget, tepungnya tipis dan bumbunya gurih. Sambalnya pas buat cocolan. Cuma porsinya terasa kurang kalau makan berdua.',
-            'helpful'  => 14,
-            'order'    => '2 Porsi',
-        ],
-        [
-            'type'     => 'text',
-            'cat'      => 'Es Chocolatos',
-            'group'    => 'minuman',
-            'rating'   => 3,
-            'icon'     => 'cup',
-            'time'     => '2 minggu lalu',
-            'initials' => 'MB',
-            'green'    => false,
-            'name'     => 'Mas Bagas',
-            'badge'    => '2 Gelas',
-            'text'     => 'Rasanya enak, coklatnya pekat dan matchanya juga wangi. Tapi esnya cepat mencair jadi agak encer di akhir. Semoga ke depannya lebih dingin dan kental.',
-        ],
-    ];
-
-    $totalAll   = count($reviews);
-    $totalPhoto = count(array_filter($reviews, fn ($r) => $r['type'] === 'photo'));
-    $totalText  = $totalAll - $totalPhoto;
-    $perPage    = 6;
+    // $reviews, $totalAll, $totalPhoto, $totalText dikirim oleh TestimoniController
+    // yang mengambilnya dari tabel `ulasans` (sama dengan data yang dikelola admin
+    // di halaman Kelola Ulasan & Feedback).
+    $reviews  = $reviews->toArray();
+    $perPage  = 6;
 
     $icons = [
         'burger' => '<path d="M4 11a8 6 0 0 1 16 0z"/><path d="M3 15h18"/><path d="M5 19h14a1 1 0 0 0 1-1v-1H4v1a1 1 0 0 0 1 1z"/>',
@@ -312,11 +107,18 @@
     .tm-user .tm-stars { margin-left: auto; gap: 4px; }
     .tm-user .tm-stars svg { width: 16px; height: 16px; }
     .tm-quote { margin: 12px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--tm-text); }
-    .tm-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid #f6e6dc; font-size: 12.5px; color: var(--tm-muted); }
+    .tm-foot { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 12px; border-top: 1px solid #f6e6dc; font-size: 12.5px; color: var(--tm-muted); }
     .tm-foot button { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; background: none; font: 500 12.5px var(--font-body, inherit); color: var(--tm-muted); cursor: pointer; transition: color .2s; }
     .tm-foot button:hover { color: var(--tm-orange); }
     .tm-foot button svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    .tm-chip { padding: 4px 10px; border-radius: 7px; background: #fff0e8; font-size: 11.5px; font-weight: 500; color: var(--tm-text); }
+    .tm-chip { flex: none; padding: 4px 10px; border-radius: 7px; background: #fff0e8; font-size: 11.5px; font-weight: 500; color: var(--tm-text); text-align: right; }
+    .tm-foot .tm-helpful { flex: none; margin-top: 2px; }
+
+    /* Balasan toko */
+    .tm-reply { margin-top: 12px; padding: 10px 14px; border-radius: 14px; background: #fff1e8; border-left: 3px solid var(--tm-orange); }
+    .tm-reply b { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--tm-brown); }
+    .tm-reply b svg { width: 12px; height: 12px; }
+    .tm-reply p { margin: 4px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--tm-text); }
 
     /* Kartu teks */
     .tm-card--text { padding: 16px 18px 20px; background: linear-gradient(180deg, #fff5ef, #fff); }
@@ -472,12 +274,17 @@
                                 </div>
                             </div>
                             <p class="tm-quote">“{{ $r['text'] }}”</p>
+                            @if ($r['balasan'])
+                                <div class="tm-reply">
+                                    <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Balasan 2DA Store</b>
+                                    <p>{{ $r['balasan'] }}</p>
+                                </div>
+                            @endif
                             <div class="tm-foot">
-                                <button type="button">
+                                <button type="button" class="tm-helpful" data-id="{{ $r['id'] }}">
                                     <svg viewBox="0 0 24 24"><path d="M7 11v9H4v-9z"/><path d="M7 11l4-7c1.5 0 2.5 1 2.5 2.5V10H19a2 2 0 0 1 2 2.3l-1 6A2 2 0 0 1 18 20H7"/></svg>
-                                    Membantu ({{ $r['helpful'] }})
+                                    <span>Membantu (<span class="tm-helpful-count">{{ $r['helpful'] }}</span>)</span>
                                 </button>
-                                <span class="tm-chip">Order: {{ $r['order'] }}</span>
                             </div>
                         </div>
                     </article>
@@ -493,6 +300,12 @@
                         <div class="tm-bubble">
                             <p>“{{ $r['text'] }}”</p>
                         </div>
+                        @if ($r['balasan'])
+                            <div class="tm-reply">
+                                <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Balasan 2DA Store</b>
+                                <p>{{ $r['balasan'] }}</p>
+                            </div>
+                        @endif
                         <div class="tm-rate-line">
                             <div class="tm-stars">
                                 @for ($i = 0; $i < 5; $i++)
@@ -595,6 +408,30 @@
         moreBtn.addEventListener('click', function () { limit += PAGE; render(); });
 
         render();
+
+        // Tombol "Membantu": kirim ke server supaya angkanya tersimpan permanen.
+        var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        document.querySelectorAll('.tm-helpful').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                if (btn.disabled) return;
+                var id = btn.dataset.id;
+                btn.disabled = true;
+                fetch('/testimoni/' + id + '/membantu', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfMeta ? csrfMeta.content : '',
+                        'Accept': 'application/json',
+                    },
+                })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        var countEl = btn.querySelector('.tm-helpful-count');
+                        if (countEl) countEl.textContent = data.helpful_count;
+                    })
+                    .catch(function () {})
+                    .finally(function () { btn.disabled = false; });
+            });
+        });
     })();
 </script>
 @endsection

@@ -22,6 +22,7 @@
             --green: #6f9b4f;
             --gold: #d6a63a;
             --red: #c0182b;
+            --blue: #3d78c9;
             --line: #f1e4d8;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -89,24 +90,32 @@
 
         /* ===== TABLE ===== */
         .list { margin-top: 26px; border-radius: 19px; overflow: hidden; background: #fff; box-shadow: 0 5px 19px rgba(180,110,50,.07); }
-        table { width: 100%; border-collapse: collapse; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         thead th { background: #fbeadb; font-size: 9.5px; font-weight: 600; letter-spacing: .06em; color: var(--muted); padding: 16px 10px; text-align: center; line-height: 1.4; }
-        thead th:first-child { text-align: left; padding-left: 80px; }
+        thead th:first-child { text-align: left; padding-left: 24px; }
+        thead th:nth-child(1) { width: 30%; }
+        thead th:nth-child(2) { width: 13%; }
+        thead th:nth-child(3) { width: 12%; }
+        thead th:nth-child(4) { width: 20%; }
+        thead th:nth-child(5) { width: 13%; }
+        thead th:nth-child(6) { width: 12%; }
         tbody tr { transition: background .2s; animation: rise .5s ease both; }
         tbody tr:hover { background: #fffaf5; }
         tbody tr.hidden { display: none !important; }
         tbody td { padding: 14px 10px; border-bottom: 1px solid var(--line); text-align: center; vertical-align: middle; }
-        tbody td:first-child { text-align: left; padding-left: 80px; }
+        tbody td:first-child { text-align: left; padding-left: 24px; }
         .prod { display: flex; align-items: center; gap: 12px; }
-        .thumb { width: 45px; height: 45px; border-radius: 11px; background: #f5ebe0; display: grid; place-items: center; font-size: 22px; flex-shrink: 0; }
+        .thumb { width: 45px; height: 45px; border-radius: 11px; background: #f5ebe0; overflow: hidden; flex-shrink: 0; }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .prod strong { display: block; font-size: 13px; font-weight: 600; }
+        .prod .desc-mini { display: block; font-size: 10.5px; color: var(--muted); margin-top: 2px; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .sku { display: flex; align-items: center; gap: 8px; margin-top: 3px; font-size: 10px; }
         .sku b { font-size: 9px; font-weight: 700; color: var(--brown); background: #fbe6d8; padding: 2px 7px; border-radius: 4px; }
         .sku span { color: var(--muted); }
         .sku span.hot { color: var(--brown); font-weight: 500; }
         .cat { display: inline-flex; align-items: center; gap: 6px; font-size: 9.5px; font-weight: 500; line-height: 1.25; text-align: left; padding: 6px 13px; border-radius: 14px; background: #fbe6d8; color: var(--muted); }
         .cat.manis { background: #fbedb5; color: #7a4a0a; }
-        .cat.pedas { background: #fbe0d8; color: #7a2a1a; }
+        .cat.minuman { background: #dbe9fa; color: #2f5c9c; }
         .price strong { display: block; font-size: 15px; font-weight: 600; line-height: 1.2; }
         .price small { display: block; font-size: 9.5px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
         .stepper { display: inline-flex; align-items: center; background: #fdf1e6; border-radius: 12px; padding: 4px; gap: 10px; box-shadow: inset 0 0 0 2px #fbeadb; }
@@ -142,6 +151,103 @@
         .pager span.dis { background: transparent; color: #a99b92; font-weight: 500; cursor: default; }
 
         .no-data { text-align: center; padding: 30px !important; color: var(--muted); font-size: 13px; font-weight: 500; }
+        .flash { margin-top: 20px; padding: 12px 18px; border-radius: 12px; background: #e9f3e0; color: #3f6a26; font-size: 12.5px; font-weight: 500; }
+
+
+        /* ===== MODAL TAMBAH / EDIT MENU ===== */
+        .menu-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .menu-modal.show { display: flex; }
+        .menu-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(31, 20, 16, .48);
+            backdrop-filter: blur(3px);
+        }
+        .menu-modal-card {
+            position: relative;
+            z-index: 1;
+            width: min(920px, 96vw);
+            height: min(820px, 92vh);
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 24px 70px rgba(31,20,16,.25);
+            display: flex;
+            flex-direction: column;
+            animation: modalIn .22s ease both;
+        }
+        .menu-modal-head {
+            min-height: 58px;
+            padding: 12px 18px 12px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid var(--line);
+            background: #fffaf5;
+        }
+        .menu-modal-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .menu-modal-subtitle {
+            color: var(--muted);
+            font-size: 10.5px;
+            margin-top: 2px;
+        }
+        .menu-modal-close {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            border-radius: 10px;
+            background: #f3e6da;
+            color: var(--muted);
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: .2s;
+            flex-shrink: 0;
+        }
+        .menu-modal-close:hover {
+            background: #ecd9c8;
+            color: var(--ink);
+            transform: scale(1.04);
+        }
+        .menu-modal-body {
+            flex: 1;
+            min-height: 0;
+            background: #fff;
+        }
+        .menu-modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+            background: #fff;
+        }
+        body.modal-open { overflow: hidden; }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(10px) scale(.985); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @media (max-width: 600px) {
+            .menu-modal { padding: 10px; }
+            .menu-modal-card {
+                width: 100%;
+                height: 96vh;
+                border-radius: 16px;
+            }
+        }
 
         /* ===== ANIMASI ===== */
         @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -161,16 +267,16 @@
 </head>
 <body>
 @php
-    // Data menu (statis sesuai desain). Ganti dengan data dari controller bila sudah siap.
-    $menu = [
-        ['id' => 1, 'emoji' => '🌭', 'nama' => 'Corndog Mini Mozarella', 'sku' => 'JAZ-01', 'ket' => 'Jajanan Favorit', 'hot' => false, 'kat' => 'Jajanan Gurih', 'kelas' => '',      'ikon' => '🥐', 'modal' => '2.800', 'stok' => 25],
-        ['id' => 2, 'emoji' => '🥟', 'nama' => 'Cireng Isi Mini',        'sku' => 'JAZ-02', 'ket' => 'Ayam Suwir',      'hot' => false, 'kat' => 'Jajanan Gurih', 'kelas' => '',      'ikon' => '🥐', 'modal' => '2.500', 'stok' => 30],
-        ['id' => 3, 'emoji' => '🧀', 'nama' => 'Tahu Crispy',            'sku' => 'JAZ-03', 'ket' => 'Renyah Gurih',    'hot' => false, 'kat' => 'Jajanan Gurih', 'kelas' => '',      'ikon' => '🥐', 'modal' => '2.200', 'stok' => 20],
-        ['id' => 4, 'emoji' => '🥞', 'nama' => 'Roti Maryam Mini',       'sku' => 'JMN-01', 'ket' => 'Susu & Keju',     'hot' => false, 'kat' => 'Jajanan Manis', 'kelas' => 'manis', 'ikon' => '🥞', 'modal' => '2.700', 'stok' => 18],
-        ['id' => 5, 'emoji' => '🌶️', 'nama' => 'Tempura Jontor',         'sku' => 'JP-01',  'ket' => 'Pedas Nampol',    'hot' => true,  'kat' => 'Jajanan Pedas', 'kelas' => 'pedas', 'ikon' => '🌶️', 'modal' => '2.400', 'stok' => 8],
-        ['id' => 6, 'emoji' => '🍫', 'nama' => 'Pop Ice Chocolate',      'sku' => 'MD-01',  'ket' => 'Dingin Segar',    'hot' => false, 'kat' => 'Minuman Dingin', 'kelas' => '',     'ikon' => '🥤', 'modal' => '2.300', 'stok' => 24],
-        ['id' => 7, 'emoji' => '🧊', 'nama' => 'Good Day Freeze',        'sku' => 'MD-02',  'ket' => 'Kopi Dingin Segar', 'hot' => false, 'kat' => 'Minuman Dingin', 'kelas' => '',    'ikon' => '🥤', 'modal' => '2.500', 'stok' => 20],
-    ];
+    // Data sekarang datang dari database (tabel products), bukan array statis lagi.
+    // $products dikirim dari App\Http\Controllers\Admin\MenuController@index
+
+    $categoryMeta = \App\Models\Product::categoryMeta();
+
+    $total       = $products->count();
+    $lowCount    = $products->where('stock', '>', 0)->where('stock', '<', 10)->count();
+    $emptyCount  = $products->where('stock', 0)->count();
+    $catCounts   = $products->groupBy('cats')->map->count();
+    $activeCats  = collect($categoryMeta)->filter(fn ($m, $key) => ($catCounts[$key] ?? 0) > 0)->count();
 @endphp
 
 <div class="layout">
@@ -183,58 +289,61 @@
 
         <div class="head">
             <div>
-                <h1>Kelola Menu &amp; Stok Jajanan</h1>
-                <p>Atur varian produk, harga jual, margin, serta kendalikan ketersediaan stok gerai secara instan.</p>
+                <h1>Kelola Menu Stok Jajanan</h1>
+                <p>Atur varian produk, harga jual, deskripsi, foto, serta kendalikan ketersediaan stok gerai secara instan. Data di sini otomatis muncul di halaman menu pelanggan.</p>
             </div>
             <div class="head-actions">
                 <a href="{{ url('/admin/kategori') }}" class="btn btn-soft">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l4 7H8z"/><rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/></svg>
                     Kelola<br>Kategori
                 </a>
-                <a href="{{ url('/admin/menu/tambah') }}" class="btn btn-orange">
+                <button type="button" class="btn btn-orange js-menu-modal" data-url="{{ url('/admin/menu/tambah') }}" data-title="Tambah Menu Baru">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
                     Tambah Menu<br>Baru
-                </a>
+                </button>
             </div>
         </div>
+
+        @if (session('success'))
+            <div class="flash">{{ session('success') }}</div>
+        @endif
 
         {{-- ===== STATISTIK ===== --}}
         <section class="stats">
             <div class="card stat">
                 <div class="stat-top">
                     <div class="sico a"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10a8 5 0 0116 0z"/><path d="M4 14h16M5 18h14"/></svg></div>
-                    <span class="chip a">↗ +3 Baru</span>
                 </div>
-                <div class="num" id="stat-total">7</div>
-                <div class="row"><b>Total Menu Aktif</b><span id="stat-total-label">7 Terdaftar</span></div>
-                <div class="prog"><span style="width:95%; background:var(--orange)"></span></div>
+                <div class="num" id="stat-total">{{ $total }}</div>
+                <div class="row"><b>Total Menu Aktif</b><span id="stat-total-label">{{ $total }} Terdaftar</span></div>
+                <div class="prog"><span style="width:100%; background:var(--orange)"></span></div>
             </div>
             <div class="card stat">
                 <div class="stat-top">
                     <div class="sico b"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 12h16M12 3v18"/></svg></div>
-                    <span class="chip b">4 Grup Aktif</span>
+                    <span class="chip b">{{ $activeCats }} Grup Aktif</span>
                 </div>
-                <div class="num">4</div>
-                <div class="row"><b>Kategori Menu</b><span>Semua Terisi</span></div>
-                <div class="prog"><span style="width:100%; background:var(--gold)"></span></div>
+                <div class="num">{{ count($categoryMeta) }}</div>
+                <div class="row"><b>Kategori Menu</b><span>{{ $activeCats }} / {{ count($categoryMeta) }} Terisi</span></div>
+                <div class="prog"><span style="width:{{ count($categoryMeta) ? round($activeCats / count($categoryMeta) * 100) : 0 }}%; background:var(--gold)"></span></div>
             </div>
             <div class="card stat">
                 <div class="stat-top">
                     <div class="sico c"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17v1" stroke="#fdf0c8" stroke-width="2"/></svg></div>
                     <span class="chip c">Segera Restok</span>
                 </div>
-                <div class="num" id="stat-low">1</div>
+                <div class="num" id="stat-low">{{ $lowCount }}</div>
                 <div class="row"><b>Stok Menipis</b><span class="dark">&lt; 10 Porsi</span></div>
-                <div class="prog"><span id="stat-low-bar" style="width:15%; background:#f5b731"></span></div>
+                <div class="prog"><span id="stat-low-bar" style="width:{{ $total ? round($lowCount / $total * 100) : 0 }}%; background:#f5b731"></span></div>
             </div>
             <div class="card stat">
                 <div class="stat-top">
                     <div class="sico d"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h3l2.5 11h9L20 7H7"/><circle cx="10" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg></div>
                     <span class="chip d">Perlu Tindakan</span>
                 </div>
-                <div class="num red" id="stat-empty">0</div>
-                <div class="row"><b>Menu Habis (0)</b><span class="red">Dapur Kosong</span></div>
-                <div class="prog"><span id="stat-empty-bar" style="width:0%; background:var(--red)"></span></div>
+                <div class="num red" id="stat-empty">{{ $emptyCount }}</div>
+                <div class="row"><b>Menu Habis ({{ $emptyCount }})</b><span class="red">Dapur Kosong</span></div>
+                <div class="prog"><span id="stat-empty-bar" style="width:{{ $total ? round($emptyCount / $total * 100) : 0 }}%; background:var(--red)"></span></div>
             </div>
         </section>
 
@@ -243,9 +352,9 @@
             <div class="f-top">
                 <label class="f-search">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-                    <input type="text" id="searchInput" placeholder="Cari nama jajanan, minuman dingin, atau kode SKU...">
+                    <input type="text" id="searchInput" placeholder="Cari nama jajanan, deskripsi, atau kode SKU...">
                 </label>
-                <span class="f-count" id="filterCount">Menampilkan 7 dari 7 Item</span>
+                <span class="f-count" id="filterCount">Menampilkan {{ $total }} dari {{ $total }} Item</span>
             </div>
 
             <div class="f-title">
@@ -253,19 +362,17 @@
                 <small>Pilih untuk menyaring</small>
             </div>
             <div class="f-row f-category" style="margin-top:2px">
-                <button class="fchip active" data-cat="all">Semua (7)</button>
-                <button class="fchip" data-cat="Jajanan Gurih">🌭 Jajanan Gurih (3)</button>
-                <button class="fchip" data-cat="Jajanan Manis">🥞 Jajanan Manis (1)</button>
-                <button class="fchip" data-cat="Jajanan Pedas">🌶️ Jajanan Pedas (1)</button>
-                <button class="fchip" data-cat="Minuman Dingin">🥤 Minuman Dingin (2)</button>
+                <button class="fchip active" data-cat="all">Semua ({{ $total }})</button>
+                @foreach ($categoryMeta as $key => $meta)
+                    <button class="fchip" data-cat="{{ $key }}">{{ $meta['label'] }} ({{ $catCounts[$key] ?? 0 }})</button>
+                @endforeach
             </div>
 
             <div class="f-row f-status">
-                <span class="f-label">STATUS STOK:</span>
                 <button class="fchip soft-active" data-status="all">Semua Status</button>
-                <button class="fchip" data-status="available"><i style="background:var(--green)"></i>Tersedia (&gt; 10)</button>
-                <button class="fchip" data-status="low"><i style="background:#f5b731"></i>Stok Menipis (&lt; 10)</button>
-                <button class="fchip" data-status="empty"><i style="background:var(--red)"></i>Habis (0)</button>
+                <button class="fchip" data-status="available"><i style="background:var(--green)"></i>Tersedia</button>
+                <button class="fchip" data-status="low"><i style="background:#f5b731"></i>Menipis</button>
+                <button class="fchip" data-status="empty"><i style="background:var(--red)"></i>Habis ({{ $emptyCount }})</button>
             </div>
         </section>
 
@@ -276,47 +383,50 @@
                     <tr>
                         <th>PRODUK / SKU</th>
                         <th>KATEGORI</th>
-                        <th>HARGA<br>JUAL /<br>MODAL</th>
-                        <th>KELOLA STOK<br>REALTIME</th>
+                        <th>HARGA<br>JUAL</th>
+                        <th>STOK</th>
                         <th>STATUS<br>JUAL</th>
                         <th>AKSI</th>
                     </tr>
                 </thead>
                 <tbody id="menuTableBody">
-                    @foreach ($menu as $m)
-                        <tr data-id="{{ $m['id'] }}" data-category="{{ $m['kat'] }}">
+                    @foreach ($products as $p)
+                        <tr data-id="{{ $p->id }}" data-category="{{ $p->cats }}">
                             <td>
                                 <div class="prod">
-                                    <div class="thumb">{{ $m['emoji'] }}</div>
+                                    <div class="thumb"><img src="{{ $p->img_url }}" alt="{{ $p->name }}" loading="lazy"></div>
                                     <div>
-                                        <strong class="item-nama">{{ $m['nama'] }}</strong>
-                                        <div class="sku"><b class="item-sku">SKU: {{ $m['sku'] }}</b><span class="{{ $m['hot'] ? 'hot' : '' }}">{{ $m['ket'] }}</span></div>
+                                        <strong class="item-nama">{{ $p->name }}</strong>
+                                        <span class="desc-mini">{{ $p->desc }}</span>
+                                        <div class="sku">
+                                            <b class="item-sku">SKU: {{ $p->sku ?? '—' }}</b>
+                                            <span class="{{ $p->is_hot ? 'hot' : '' }}">{{ $p->is_hot ? 'Favorit' : '' }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
-                            <td><span class="cat {{ $m['kelas'] }}"><span>{{ $m['ikon'] }}</span><span class="cat-text">{!! str_replace(' ', '<br>', e($m['kat'])) !!}</span></span></td>
+                            <td><span class="cat {{ $p->category_class }}"><span class="cat-text">{!! str_replace(' ', '<br>', e($p->category_label)) !!}</span></span></td>
                             <td>
                                 <div class="price">
-                                    <strong>Rp<br>5.000</strong>
-                                    <small>Modal: Rp<br>{{ $m['modal'] }}</small>
+                                    <strong>Rp<br>{{ number_format($p->price, 0, ',', '.') }}</strong>
                                 </div>
                             </td>
                             <td>
                                 <div class="stock-box">
-                                    <div class="stepper {{ $m['stok'] == 0 ? 'empty' : ($m['stok'] < 10 ? 'low' : '') }}">
+                                    <div class="stepper {{ $p->stock == 0 ? 'empty' : ($p->stock < 10 ? 'low' : '') }}">
                                         <button type="button" data-step="-1" aria-label="Kurangi stok">−</button>
-                                        <span class="qty">{{ $m['stok'] }}</span>
+                                        <span class="qty">{{ $p->stock }}</span>
                                         <button type="button" data-step="1" aria-label="Tambah stok">+</button>
                                     </div>
-                                    <span class="stock-badge {{ $m['stok'] == 0 ? 'danger' : ($m['stok'] < 10 ? 'warn' : '') }}">
+                                    <span class="stock-badge {{ $p->stock == 0 ? 'danger' : ($p->stock < 10 ? 'warn' : '') }}">
                                         <i></i>
                                         <em style="font-style:normal">
-                                            @if($m['stok'] == 0)
+                                            @if($p->stock == 0)
                                                 Stok Habis
-                                            @elseif($m['stok'] < 10)
-                                                Menipis: {{ $m['stok'] }} Porsi
+                                            @elseif($p->stock < 10)
+                                                Menipis: {{ $p->stock }} Porsi
                                             @else
-                                                Tersedia ({{ $m['stok'] }})
+                                                Tersedia ({{ $p->stock }})
                                             @endif
                                         </em>
                                     </span>
@@ -324,16 +434,16 @@
                             </td>
                             <td>
                                 <div class="sw">
-                                    <button type="button" class="switch {{ $m['stok'] == 0 ? 'off' : '' }}" aria-label="Status jual"></button>
-                                    <span class="sw-label">{{ $m['stok'] == 0 ? 'Nonaktif' : 'Tersedia' }}</span>
+                                    <button type="button" class="switch {{ !$p->is_active ? 'off' : '' }}" aria-label="Status jual"></button>
+                                    <span class="sw-label">{{ $p->is_active ? 'Tersedia' : 'Nonaktif' }}</span>
                                 </div>
                             </td>
                             <td>
                                 <div class="actions">
-                                    <a href="{{ url('/admin/menu/'.$m['id'].'/edit') }}" aria-label="Ubah menu">
+                                    <button type="button" class="js-menu-modal" data-url="{{ url('/admin/menu/'.$p->id.'/edit') }}" data-title="Ubah Menu" aria-label="Ubah menu">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h12M3 11h8M3 16h6"/><path d="M14 20l1-4 6-6 3 3-6 6z" transform="translate(-2 -1)"/></svg>
-                                    </a>
-                                    <form action="{{ url('/admin/menu/'.$m['id']) }}" method="POST" onsubmit="return confirm('Hapus menu ini?')">
+                                    </button>
+                                    <form action="{{ url('/admin/menu/'.$p->id) }}" method="POST" onsubmit="return confirm('Hapus menu ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" aria-label="Hapus menu">
@@ -354,7 +464,7 @@
                 <div class="left">
                     <span>Baris per halaman:</span>
                     <span class="sel">10 item</span>
-                    <span style="margin-left:8px" id="footCount">1 - 7 dari 7 menu</span>
+                    <span style="margin-left:8px" id="footCount">{{ $total ? '1 - '.$total : '0' }} dari {{ $total }} menu</span>
                 </div>
                 <div class="pager">
                     <span class="dis">Sebelumnya</span><span class="on">1</span><span class="dis">Berikutnya</span>
@@ -365,8 +475,91 @@
     </main>
 </div>
 
+<!-- Modal Tambah / Edit Menu -->
+<div id="menuModal" class="menu-modal" aria-hidden="true">
+    <div class="menu-modal-backdrop" data-close-menu-modal></div>
+    <div class="menu-modal-card" role="dialog" aria-modal="true" aria-labelledby="menuModalTitle">
+        <div class="menu-modal-head">
+            <div>
+                <div id="menuModalTitle" class="menu-modal-title">Tambah Menu Baru</div>
+                <div class="menu-modal-subtitle">Form dibuka tanpa meninggalkan halaman menu.</div>
+            </div>
+            <button type="button" class="menu-modal-close" id="closeMenuModal" aria-label="Tutup">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="menu-modal-body">
+            <iframe id="menuModalFrame" title="Form menu"></iframe>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+    // ===== MODAL TAMBAH / EDIT MENU =====
+    var menuModal = document.getElementById('menuModal');
+    var menuModalFrame = document.getElementById('menuModalFrame');
+    var menuModalTitle = document.getElementById('menuModalTitle');
+    var closeMenuModalBtn = document.getElementById('closeMenuModal');
+
+    function closeMenuModal(reload) {
+        menuModal.classList.remove('show');
+        menuModal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+
+        if (reload) {
+            window.location.reload();
+        }
+    }
+
+    function openMenuModal(url, title) {
+        menuModalTitle.textContent = title || 'Kelola Menu';
+        menuModalFrame.src = url;
+        menuModal.classList.add('show');
+        menuModal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+    }
+
+    document.querySelectorAll('.js-menu-modal').forEach(function (trigger) {
+        trigger.addEventListener('click', function () {
+            openMenuModal(trigger.dataset.url, trigger.dataset.title);
+        });
+    });
+
+    closeMenuModalBtn.addEventListener('click', function () {
+        closeMenuModal(false);
+    });
+
+    document.querySelectorAll('[data-close-menu-modal]').forEach(function (el) {
+        el.addEventListener('click', function () {
+            closeMenuModal(false);
+        });
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menuModal.classList.contains('show')) {
+            closeMenuModal(false);
+        }
+    });
+
+    // Setelah form di dalam iframe berhasil submit dan redirect ke halaman index,
+    // tutup modal lalu refresh tabel agar data terbaru langsung terlihat.
+    menuModalFrame.addEventListener('load', function () {
+        try {
+            var framePath = menuModalFrame.contentWindow.location.pathname;
+            var isMenuIndex = /\/admin\/menu\/?$/.test(framePath);
+            if (isMenuIndex && menuModal.classList.contains('show')) {
+                closeMenuModal(true);
+            }
+        } catch (e) {
+            // Aman diabaikan jika browser membatasi akses iframe.
+        }
+    });
+
     var rows = Array.from(document.querySelectorAll('#menuTableBody tr[data-id]'));
     var totalCount = rows.length;
 
@@ -378,18 +571,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var selectedCategory = 'all';
     var selectedStatus = 'all';
 
-    // Update Statistik Atas
     function updateStats() {
         var lowCount = 0;
         var emptyCount = 0;
 
         rows.forEach(function (row) {
             var qty = parseInt(row.querySelector('.qty').textContent, 10);
-            if (qty === 0) {
-                emptyCount++;
-            } else if (qty < 10) {
-                lowCount++;
-            }
+            if (qty === 0) emptyCount++;
+            else if (qty < 10) lowCount++;
         });
 
         document.getElementById('stat-low').textContent = lowCount;
@@ -402,61 +591,40 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('stat-empty-bar').style.width = emptyPct + '%';
     }
 
-    // Fungsi Penyaringan Utama
     function applyFilter() {
         var query = searchInput.value.toLowerCase().trim();
         var visibleCount = 0;
 
         rows.forEach(function (row) {
             var nama = row.querySelector('.item-nama').textContent.toLowerCase();
+            var desc = row.querySelector('.desc-mini').textContent.toLowerCase();
             var sku = row.querySelector('.item-sku').textContent.toLowerCase();
             var category = row.getAttribute('data-category');
             var qty = parseInt(row.querySelector('.qty').textContent, 10);
 
-            // Match Search
-            var matchSearch = nama.includes(query) || sku.includes(query) || category.toLowerCase().includes(query);
-
-            // Match Category Filter
+            var matchSearch = nama.includes(query) || desc.includes(query) || sku.includes(query);
             var matchCategory = (selectedCategory === 'all') || (category === selectedCategory);
 
-            // Match Status Filter
             var matchStatus = false;
-            if (selectedStatus === 'all') {
-                matchStatus = true;
-            } else if (selectedStatus === 'available') {
-                matchStatus = qty >= 10;
-            } else if (selectedStatus === 'low') {
-                matchStatus = qty > 0 && qty < 10;
-            } else if (selectedStatus === 'empty') {
-                matchStatus = qty === 0;
-            }
+            if (selectedStatus === 'all') matchStatus = true;
+            else if (selectedStatus === 'available') matchStatus = qty >= 10;
+            else if (selectedStatus === 'low') matchStatus = qty > 0 && qty < 10;
+            else if (selectedStatus === 'empty') matchStatus = qty === 0;
 
-            if (matchSearch && matchCategory && matchStatus) {
-                row.classList.remove('hidden');
-                visibleCount++;
-            } else {
-                row.classList.add('hidden');
-            }
+            var show = matchSearch && matchCategory && matchStatus;
+            row.classList.toggle('hidden', !show);
+            if (show) visibleCount++;
         });
 
-        // Tampilkan pesan kosong jika tidak ada data
-        if (visibleCount === 0) {
-            noDataRow.classList.remove('hidden');
-        } else {
-            noDataRow.classList.add('hidden');
-        }
-
-        // Render Teks Jumlah
+        noDataRow.classList.toggle('hidden', visibleCount !== 0);
         filterCountEl.textContent = 'Menampilkan ' + visibleCount + ' dari ' + totalCount + ' Item';
         footCountEl.textContent = (visibleCount > 0 ? '1 - ' + visibleCount : '0') + ' dari ' + totalCount + ' menu';
 
         updateStats();
     }
 
-    // Live Search Event
     searchInput.addEventListener('input', applyFilter);
 
-    // Event Handler Filter Kategori
     document.querySelectorAll('.f-category .fchip').forEach(function (chip) {
         chip.addEventListener('click', function () {
             document.querySelectorAll('.f-category .fchip').forEach(function (c) { c.classList.remove('active'); });
@@ -466,7 +634,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Event Handler Filter Status
     document.querySelectorAll('.f-status .fchip').forEach(function (chip) {
         chip.addEventListener('click', function () {
             document.querySelectorAll('.f-status .fchip').forEach(function (c) { c.classList.remove('soft-active'); });
@@ -476,8 +643,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Stepper stok & Switch Status Per Baris
+    // Stepper stok & switch status -> sekarang beneran disimpan ke server (AJAX)
     rows.forEach(function (row) {
+        var productId = row.getAttribute('data-id');
         var stepper = row.querySelector('.stepper');
         var qtyEl = row.querySelector('.qty');
         var badge = row.querySelector('.stock-badge');
@@ -485,10 +653,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var sw = row.querySelector('.switch');
         var swLabel = row.querySelector('.sw-label');
 
-        function renderStockUI() {
-            var n = parseInt(qtyEl.textContent, 10);
-
-            // Hapus semua varian status
+        function renderStockUI(n, isActive) {
             stepper.classList.remove('low', 'empty');
             badge.classList.remove('warn', 'danger');
 
@@ -496,8 +661,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 stepper.classList.add('empty');
                 badge.classList.add('danger');
                 label.textContent = 'Stok Habis';
-                sw.classList.add('off');
-                swLabel.textContent = 'Nonaktif';
             } else if (n < 10) {
                 stepper.classList.add('low');
                 badge.classList.add('warn');
@@ -505,29 +668,52 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 label.textContent = 'Tersedia (' + n + ')';
             }
+
+            sw.classList.toggle('off', !isActive);
+            swLabel.textContent = isActive ? 'Tersedia' : 'Nonaktif';
         }
 
         row.querySelectorAll('.stepper button').forEach(function (btn) {
             btn.addEventListener('click', function (e) {
                 e.stopPropagation();
-                var current = parseInt(qtyEl.textContent, 10);
                 var step = parseInt(btn.dataset.step, 10);
-                var nextVal = Math.max(0, current + step);
 
-                qtyEl.textContent = nextVal;
-                renderStockUI();
-                applyFilter(); // Terapkan ulang filter jika stok berpindah batas kategori status
+                fetch('/admin/menu/' + productId + '/stock', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ step: step }),
+                })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    qtyEl.textContent = data.stock;
+                    renderStockUI(data.stock, data.is_active);
+                    applyFilter();
+                })
+                .catch(function () { alert('Gagal menyimpan perubahan stok. Coba lagi.'); });
             });
         });
 
-        // Switch toggle status jual
         sw.addEventListener('click', function () {
-            sw.classList.toggle('off');
-            swLabel.textContent = sw.classList.contains('off') ? 'Nonaktif' : 'Tersedia';
+            fetch('/admin/menu/' + productId + '/status', {
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                sw.classList.toggle('off', !data.is_active);
+                swLabel.textContent = data.is_active ? 'Tersedia' : 'Nonaktif';
+            })
+            .catch(function () { alert('Gagal menyimpan status jual. Coba lagi.'); });
         });
     });
 
-    // Inisialisasi awal
     updateStats();
 });
 </script>

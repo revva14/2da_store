@@ -76,7 +76,7 @@
         .banner { display: flex; align-items: center; gap: 11px; background: #f5e6dc; border-radius: 14.5px; padding: 13px; margin-top: 19px; }
         .banner .bi { width: 32px; height: 32px; border-radius: 9.5px; background: var(--brown); color: #fff; display: grid; place-items: center; flex-shrink: 0; }
         .banner strong { display: block; font-size: 12px; font-weight: 600; }
-        .banner span { font-size: 10px; color: var(--muted); }
+        .banner > div > span { font-size: 10px; color: var(--muted); }
         .banner .btn { margin-left: auto; padding: 8px 14.5px; font-size: 10.5px; }
 
         /* ===== BODY GRID ===== */
@@ -269,8 +269,8 @@
             <div class="card stat">
                 <div>
                     <div class="lbl">OMSET TERKONFIRMASI</div>
-                    <div class="num money">Rp<br>2.418.000</div>
-                    <div class="note green"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>94% QRIS Settlement</div>
+                    <div class="num money" id="statOmset">Rp<br>{{ number_format($omsetTerkonfirmasi ?? 0, 0, ',', '.') }}</div>
+                    <div class="note green"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg><span id="statOmsetNote">{{ $persenQris ?? 0 }}% QRIS Settlement</span></div>
                 </div>
                 <div class="sico d"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 20V8l3-4h6l3 4v12z"/><path d="M8 12h8M8 16h8"/></svg></div>
             </div>
@@ -361,7 +361,7 @@
     /* ============ KONFIGURASI ============ */
     var CONFIG = {
         // Ubah ke true kalau route PATCH /admin/pesanan/{no}/status sudah dibuat di Laravel
-        simpanKeServer: false,
+        simpanKeServer: true,
         csrf: (document.querySelector('meta[name="csrf-token"]') || {}).content || '',
         urlStatus: function (no) { return '{{ url('/admin/pesanan') }}/' + encodeURIComponent(no) + '/status'; }
     };
@@ -454,7 +454,8 @@
     function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
     function rp(n) { return 'Rp ' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
     function inisial(nama) { return String(nama || '?').split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join(''); }
-    function total(o) { return o.items.reduce(function (a, i) { return a + i.q * i.h; }, 0); }
+    function total(o) { return (typeof o.total === 'number') ? o.total : o.items.reduce(function (a, i) { return a + i.q * i.h; }, 0); }
+    function fmtRupiah(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
     function waLink(hp) { var d = String(hp).replace(/\D/g, ''); if (d.charAt(0) === '0') { d = '62' + d.slice(1); } return 'https://wa.me/' + d; }
     function find(no) { return DATA.filter(function (o) { return o.no === no; })[0]; }
     function isQris(o) { return /^QRIS/i.test(o.bayar); }
@@ -526,6 +527,14 @@
         $('banner').classList.toggle('hidden', !ada);
         $('bannerTitle').textContent = CNT.baru + ' Pesanan baru menanti konfirmasi kilat';
         $('btnTerimaSemuaTxt').textContent = 'Terima Semua (' + CNT.baru + ')';
+
+        // Omset terkonfirmasi = total pesanan yang sudah "selesai".
+        var selesai = DATA.filter(function (o) { return o.status === 'selesai'; });
+        var omset = selesai.reduce(function (a, o) { return a + total(o); }, 0);
+        var qrisSelesai = selesai.filter(isQris).length;
+        var persenQris = selesai.length ? Math.round(qrisSelesai / selesai.length * 100) : 0;
+        $('statOmset').innerHTML = 'Rp<br>' + fmtRupiah(omset);
+        $('statOmsetNote').textContent = persenQris + '% QRIS Settlement';
     }
 
     function visible() {

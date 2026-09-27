@@ -46,7 +46,6 @@
         .box { padding: 19px; position: relative; overflow: hidden; animation: rise .6s ease both; }
         .box:nth-child(2) { animation-delay: .08s; } .box:nth-child(3) { animation-delay: .16s; }
         .box .ttl { font-size: 9.5px; font-weight: 600; letter-spacing: .04em; color: var(--ink); }
-        .b1::before { content: ''; position: absolute; top: -20px; right: 10px; width: 90px; height: 90px; border-radius: 50%; background: #fdf1e6; }
         .score { display: flex; align-items: baseline; gap: 8px; margin-top: 16px; position: relative; }
         .score strong { font-size: 32px; font-weight: 600; color: #7a5346; letter-spacing: .01em; }
         .score span { font-size: 15px; font-weight: 500; color: var(--muted); }
@@ -137,9 +136,10 @@
         .reply .rh small { font-size: 9.5px; color: var(--muted); font-weight: 400; }
         .reply p { font-size: 11px; line-height: 1.6; color: var(--muted); margin-top: 7px; max-width: 880px; }
         .reply .acts { display: flex; gap: 12px; margin-top: 7px; font-size: 9px; font-weight: 500; }
-        .reply .acts a { display: flex; align-items: center; gap: 4px; transition: color .2s; }
+        .reply .acts a, .reply .acts button { display: flex; align-items: center; gap: 4px; transition: color .2s; background: none; border: 0; padding: 0; margin: 0; font: inherit; color: inherit; cursor: pointer; }
         .reply .acts a:first-child { color: var(--brown); }
-        .reply .acts a:hover { text-decoration: underline; }
+        .reply .acts a:hover, .reply .acts button:hover { text-decoration: underline; }
+        .reply .acts form { display: contents; }
 
         .form { background: #f7ebdf; border-radius: 12px; padding: 13px 13px 10px; margin-top: 19px; }
         .form .fh { display: flex; align-items: center; justify-content: space-between; font-size: 10px; font-weight: 600; }
@@ -157,6 +157,8 @@
         .pager span:hover { background: #fae4d0; }
         .pager span.on { background: var(--brown); color: #fff; }
         .pager span.dots { background: transparent; cursor: default; }
+        .pager a { min-width: 25px; height: 25px; border-radius: 8px; background: #fdf1e6; font-size: 10px; font-weight: 600; color: var(--ink); display: grid; place-items: center; padding: 0 6px; cursor: pointer; transition: background .2s; text-decoration: none; }
+        .pager a:hover { background: #fae4d0; }
 
         /* ===== ANIMASI ===== */
         @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -175,35 +177,6 @@
     </style>
 </head>
 <body>
-@php
-    // Data ulasan (statis sesuai desain). Ganti dengan data dari controller bila sudah siap.
-    $ulasan = [
-        [
-            'id' => 1, 'ini' => 'AR', 'nama' => 'Anisa Rahmawati', 'pin' => true, 'urgent' => false,
-            'bintang' => 5, 'waktu' => '14 Okt 2024, 15:42 WIB', 'order' => '#ORD-9821',
-            'item' => ['1x Corndog Mini Mozarella', '1x Pop Ice Chocolate'],
-            'isi' => '“Corndog mini mozarellanya enak banget kejunya lumer mulur pas digigit! Pop Ice Chocolatenya juga segar manisnya pas, gak bikin eneg. Cocok banget buat cemilan sore santai. Pengemasannya juga rapi!”',
-            'foto' => 'images/ulasan/ulasan-1.jpg',
-            'balas' => ['waktu' => '14 Okt 2024, 16:10 WIB', 'isi' => 'Halo Kak Anisa! Terima kasih banyak atas ulasan hangat dan foto cantiknya. Senang sekali tahu Corndog Mini Mozarella dan Pop Ice Chocolate kami cocok di lidah Kakak. Ditunggu orderan berikutnya ya kak, salam hangat dari seluruh tim 2da Store! ✨', 'aksi' => true],
-        ],
-        [
-            'id' => 2, 'ini' => 'DP', 'nama' => 'Dimas Prasetyo', 'pin' => false, 'urgent' => true,
-            'bintang' => 3, 'waktu' => 'Hari ini, 11:20 WIB (2 jam yang lalu)', 'order' => '#ORD-9844',
-            'item' => ['1x Tempura Jontor', '1x Tahu Crispy'],
-            'isi' => '“Rasa Tempura Jontornya pedas nampol gurih mantap! Cuma Tahu Crispynya waktu sampai agak kurang hangat jadi kerenyahannya sedikit berkurang. Mohon kemasannya ditutup lebih rapat lagi ya min.”',
-            'foto' => null, 'balas' => null,
-        ],
-        [
-            'id' => 3, 'ini' => 'FS', 'nama' => 'Fauzan Syahrul', 'pin' => false, 'urgent' => false,
-            'bintang' => 5, 'waktu' => 'Kemarin, 19:15 WIB', 'order' => '#ORD-9799',
-            'item' => ['1x Roti Maryam Mini', '1x Cireng Isi Mini'],
-            'isi' => '“Cireng isi mininya renyah gurih dan isiannya gak pelit. Roti maryam mininya juga lembut, wangi butter gurih manisnya pas banget. Selalu jadi cemilan favorit tiap kumpul bareng keluarga!”',
-            'foto' => 'images/ulasan/ulasan-3.jpg',
-            'balas' => ['waktu' => 'Kemarin, 20:05 WIB', 'isi' => 'Wah terima kasih banyak Kak Fauzan! Senang sekali Roti Maryam Mini dan Cireng Isi Mini jadi cemilan favorit Kakak. Kami selalu menjaga kelezatan serta kerenyahan bahan fresh setiap hari! 🙏✨', 'aksi' => false],
-        ],
-    ];
-@endphp
-
 <div class="layout">
 
     @include('partials.sidebaradmin')
@@ -217,40 +190,44 @@
                 <h1>Kelola Ulasan &amp; Feedback</h1>
                 <p>Pantau ulasan pelanggan, kelola reputasi citarasa, dan berikan tanggapan instan secara profesional.</p>
             </div>
-            <a href="{{ url('/admin/ulasan/unduh') }}" class="btn-dl">
+            <a href="{{ route('admin.ulasan.unduh') }}" class="btn-dl">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>
                 Unduh Rekap
             </a>
         </div>
 
+        @if (session('success'))
+            <p style="margin-top:14px; padding:12px 16px; border-radius:12px; background:#e6efd8; color:#4a6a2a; font-size:12.5px; font-weight:500;">{{ session('success') }}</p>
+        @endif
+
         {{-- ===== RINGKASAN ===== --}}
         <section class="sum">
             <div class="card box b1">
                 <div class="ttl">SKOR KEPUASAN KUMULATIF</div>
-                <div class="score"><strong>4.8</strong><span>/5.0</span></div>
+                <div class="score"><strong>{{ number_format($rataRata, 1) }}</strong><span>/5.0</span></div>
                 <div class="stars-row">
-                    <span class="stars">★★★★<span class="off" style="position:relative">★</span></span>
-                    <span>486 Total Ulasan</span>
+                    <span class="stars">@for ($s = 1; $s <= 5; $s++)<span class="{{ $s <= round($rataRata) ? '' : 'off' }}">★</span>@endfor</span>
+                    <span>{{ $totalUlasan }} Total Ulasan</span>
                 </div>
-                <p class="rec">94% pembeli merekomendasikan jajanan &amp;<br>kopi 2da Store kepada kerabat terdekat.</p>
+                <p class="rec">{{ $totalUlasan ? round(($distribusi[5] + $distribusi[4]) / $totalUlasan * 100) : 0 }}% pembeli merekomendasikan jajanan &amp;<br>kopi 2da Store kepada kerabat terdekat.</p>
                 <div class="resp">
                     <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v13H9l-5 4z"/><path d="M9 10l2 2 4-4"/></svg></div>
                     <div>
-                        <strong>96% Respons</strong>
-                        <small>468 dari 486<br>dibalas</small>
+                        <strong>{{ $responseRate }}% Respons</strong>
+                        <small>{{ $sudahDibalas }} dari {{ $totalUlasan }}<br>dibalas</small>
                     </div>
-                    <span class="good"><i></i>Sangat<br>Baik</span>
+                    <span class="good"><i></i>{{ $responseRate >= 80 ? 'Sangat' : 'Perlu' }}<br>{{ $responseRate >= 80 ? 'Baik' : 'Ditingkatkan' }}</span>
                 </div>
             </div>
 
             <div class="card box">
-                <div class="dist-head"><div class="ttl">DISTRIBUSI RATING BINTANG</div><span>Bulan Ini</span></div>
+                <div class="dist-head"><div class="ttl">DISTRIBUSI RATING BINTANG</div><span>Semua Waktu</span></div>
                 <div class="dist">
-                    <div class="dist-row"><span class="n">5 <em>★</em></span><div class="track"><span style="width:82%; background:var(--orange)"></span></div><span class="c">402</span></div>
-                    <div class="dist-row"><span class="n">4 <em>★</em></span><div class="track"><span style="width:12%; background:#fbb98a"></span></div><span class="c">58</span></div>
-                    <div class="dist-row"><span class="n">3 <em>★</em></span><div class="track"><span style="width:4%; background:var(--gold)"></span></div><span class="c">18</span></div>
-                    <div class="dist-row"><span class="n">2 <em>★</em></span><div class="track"><span style="width:1%; background:#8a4a3a"></span></div><span class="c">5</span></div>
-                    <div class="dist-row"><span class="n">1 <em>★</em></span><div class="track"><span style="width:.7%; background:var(--red)"></span></div><span class="c">3</span></div>
+                    @php $warna = [5 => 'var(--orange)', 4 => '#fbb98a', 3 => 'var(--gold)', 2 => '#8a4a3a', 1 => 'var(--red)']; @endphp
+                    @for ($bintang = 5; $bintang >= 1; $bintang--)
+                        @php $persen = $totalUlasan ? round($distribusi[$bintang] / $totalUlasan * 100, 1) : 0; @endphp
+                        <div class="dist-row"><span class="n">{{ $bintang }} <em>★</em></span><div class="track"><span style="width:{{ $persen }}%; background:{{ $warna[$bintang] }}"></span></div><span class="c">{{ $distribusi[$bintang] }}</span></div>
+                    @endfor
                 </div>
                 <div class="dist-pad"></div>
             </div>
@@ -276,144 +253,131 @@
         </section>
 
         {{-- ===== FILTER ===== --}}
+        <form method="GET" action="{{ route('admin.ulasan') }}">
         <section class="card filter">
             <div class="f-main">
                 <div class="f-chips" id="ratingChips">
-                    <button class="fchip active">Semua Rating (486)</button>
-                    <button class="fchip"><em>★</em> 5 Bintang (402)</button>
-                    <button class="fchip"><em>★</em> 4 Bintang (58)</button>
-                    <button class="fchip"><em>★</em> 3 Bintang (18)</button>
-                    <button class="fchip"><em class="red">★</em> 1–2 Bintang (8)</button>
+                    <button type="submit" name="rating" value="" class="fchip {{ request('rating') ? '' : 'active' }}">Semua Rating ({{ $totalUlasan }})</button>
+                    <button type="submit" name="rating" value="5" class="fchip {{ request('rating') === '5' ? 'active' : '' }}"><em>★</em> 5 Bintang ({{ $distribusi[5] }})</button>
+                    <button type="submit" name="rating" value="4" class="fchip {{ request('rating') === '4' ? 'active' : '' }}"><em>★</em> 4 Bintang ({{ $distribusi[4] }})</button>
+                    <button type="submit" name="rating" value="3" class="fchip {{ request('rating') === '3' ? 'active' : '' }}"><em>★</em> 3 Bintang ({{ $distribusi[3] }})</button>
+                    <button type="submit" name="rating" value="1-2" class="fchip {{ request('rating') === '1-2' ? 'active' : '' }}"><em class="red">★</em> 1–2 Bintang ({{ $ratingSatuDua }})</button>
                 </div>
                 <div class="f-status">
                     <span>STATUS<br>BALASAN:</span>
                     <div class="seg" id="statusSeg">
-                        <button class="active">Semua</button>
-                        <button>Belum<br>Dibalas <b>18</b></button>
-                        <button>Sudah<br>Dibalas</button>
+                        <button type="submit" name="status" value="" class="{{ request('status') ? '' : 'active' }}">Semua</button>
+                        <button type="submit" name="status" value="belum" class="{{ request('status') === 'belum' ? 'active' : '' }}">Belum<br>Dibalas <b>{{ $belumDibalas }}</b></button>
+                        <button type="submit" name="status" value="sudah" class="{{ request('status') === 'sudah' ? 'active' : '' }}">Sudah<br>Dibalas</button>
                     </div>
                 </div>
             </div>
             <div class="f-sub">
                 <label class="f-search">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-                    <input type="text" placeholder="Cari ulasan, kata kunci, pembeli...">
+                    <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Cari ulasan, kata kunci, pembeli...">
                 </label>
-                <div class="f-select">
-                    <select>
-                        <option>Semua Menu / Produk</option>
-                        <option>Corndog Mini Mozarella</option>
-                        <option>Pop Ice Chocolate</option>
-                        <option>Tempura Jontor</option>
-                    </select>
-                </div>
+                <button type="submit" class="f-select" style="border:0; cursor:pointer;">Terapkan Pencarian</button>
                 <div class="f-sort"><span>Urutkan:</span><b>Terbaru</b></div>
             </div>
         </section>
+        </form>
 
         {{-- ===== DAFTAR ULASAN ===== --}}
-        @foreach ($ulasan as $r)
-            <article class="card review {{ $r['urgent'] ? 'urgent' : '' }}">
+        @forelse ($ulasan as $r)
+            <article class="card review {{ $r->butuh_segera ? 'urgent' : '' }}" id="ulasan-{{ $r->id }}">
                 <div class="r-head">
-                    <div class="av" style="{{ $r['urgent'] ? '' : '' }}">{{ $r['ini'] }}</div>
+                    <div class="av">{{ $r->inisial }}</div>
                     <div>
                         <div class="r-name">
-                            <strong>{{ $r['nama'] }}</strong>
+                            <strong>{{ $r->nama }}</strong>
                             <span class="tag ver"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>Verified Buyer</span>
-                            @if ($r['pin'])
+                            @if ($r->is_pinned)
                                 <span class="tag pin"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 3h6l-1 6 3 3v2H7v-2l3-3zM12 14v7"/></svg>Disematkan di Beranda</span>
                             @endif
-                            @if ($r['urgent'])
+                            @if ($r->butuh_segera)
                                 <span class="tag urg"><i></i>Butuh Balasan Segera</span>
                             @endif
                         </div>
                         <div class="r-meta">
-                            <span class="stars" style="font-size:12px">@for ($s = 1; $s <= 5; $s++)<span class="{{ $s <= $r['bintang'] ? '' : 'off' }}">★</span>@endfor</span>
-                            <b>{{ number_format($r['bintang'], 1) }}</b>
-                            <span class="dot">{{ $r['waktu'] }}</span>
-                            <span class="dot">No. Pesanan: {{ $r['order'] }}</span>
+                            <span class="stars" style="font-size:12px">@for ($s = 1; $s <= 5; $s++)<span class="{{ $s <= $r->rating ? '' : 'off' }}">★</span>@endfor</span>
+                            <b>{{ number_format($r->rating, 1) }}</b>
+                            <span class="dot">{{ $r->created_at->translatedFormat('d M Y, H:i') }} WIB</span>
+                            @if ($r->no_pesanan)
+                                <span class="dot">No. Pesanan: {{ $r->no_pesanan }}</span>
+                            @endif
                         </div>
                     </div>
                 </div>
 
                 <div class="r-tools">
-                    <button type="button" class="tool {{ $r['pin'] ? 'on' : '' }}" aria-label="Sematkan di beranda">
+                    <button type="button" class="tool tool-pin {{ $r->is_pinned ? 'on' : '' }}" data-id="{{ $r->id }}" aria-label="Sematkan di beranda">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M9 3h6l-1 6 3 3v2H7v-2l3-3z"/><path d="M12 14v7" stroke="currentColor" stroke-width="2"/></svg>
                     </button>
-                    <button type="button" class="tool" aria-label="{{ $r['urgent'] ? 'Tandai' : 'Opsi lainnya' }}">
-                        @if ($r['urgent'])
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 21V4M5 4h13l-2 4 2 4H5"/></svg>
-                        @else
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>
-                        @endif
-                    </button>
                 </div>
 
-                <div class="items">
-                    @foreach ($r['item'] as $it)
-                        <span class="item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="2"><path d="M4 10a8 5 0 0116 0z"/><path d="M4 14h16M5 18h14"/></svg>{{ $it }}</span>
-                    @endforeach
-                </div>
-
-                <p class="r-text">{{ $r['isi'] }}</p>
-
-                @if ($r['foto'])
-                    <div class="photo"><img src="{{ asset($r['foto']) }}" alt="Foto ulasan {{ $r['nama'] }}" onerror="this.style.display='none'"></div>
+                @if ($r->item_pesanan)
+                    <div class="items">
+                        @foreach ($r->item_pesanan as $it)
+                            <span class="item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="2"><path d="M4 10a8 5 0 0116 0z"/><path d="M4 14h16M5 18h14"/></svg>{{ $it }}</span>
+                        @endforeach
+                    </div>
                 @endif
 
-                @if ($r['balas'])
-                    <div class="reply">
+                <p class="r-text">“{{ $r->komentar }}”</p>
+
+                @if ($r->foto)
+                    <div class="photo"><img src="{{ asset($r->foto) }}" alt="Foto ulasan {{ $r->nama }}" onerror="this.style.display='none'"></div>
+                @endif
+
+                @if ($r->sudah_dibalas)
+                    <div class="reply" id="reply-view-{{ $r->id }}">
                         <div class="rh">
                             <span><i>2</i>Respon Resmi Toko (2da Store Admin)</span>
-                            <small>{{ $r['balas']['waktu'] }}</small>
+                            <small>{{ optional($r->balasan_at)->translatedFormat('d M Y, H:i') }} WIB</small>
                         </div>
-                        <p>{{ $r['balas']['isi'] }}</p>
-                        @if ($r['balas']['aksi'])
-                            <div class="acts">
-                                <a href="{{ url('/admin/ulasan/'.$r['id'].'/balasan/edit') }}"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20l1-5L17 3l4 4L9 19z"/></svg>Edit Balasan</a>
-                                <a href="{{ url('/admin/ulasan/'.$r['id'].'/balasan/hapus') }}"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Hapus</a>
-                            </div>
-                        @endif
+                        <p>{{ $r->balasan }}</p>
+                        <div class="acts">
+                            <a href="#" onclick="event.preventDefault(); document.getElementById('reply-view-{{ $r->id }}').hidden = true; document.getElementById('reply-form-{{ $r->id }}').hidden = false;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20l1-5L17 3l4 4L9 19z"/></svg>Edit Balasan</a>
+                            <form action="{{ route('admin.ulasan.balasan.hapus', $r) }}" method="POST" onsubmit="return confirm('Hapus balasan ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Hapus</button>
+                            </form>
+                        </div>
                     </div>
-                @else
-                    <form class="form" action="{{ url('/admin/ulasan/'.$r['id'].'/balas') }}" method="POST">
-                        @csrf
-                        <div class="fh">
-                            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 016 6v3"/></svg>Balas Ulasan Pelanggan</span>
-                            <div class="tpl"><span>Template Cepat:</span><button type="button" data-tpl="Halo Kak {{ explode(' ', $r['nama'])[0] }}! Terima kasih banyak atas ulasannya. Kami senang sekali Kakak menikmati jajanan 2da Store. Ditunggu orderan berikutnya ya kak!">+ Tanggapan Ramah</button><button type="button" data-tpl="Terima kasih atas masukannya, Kak {{ explode(' ', $r['nama'])[0] }}. Evaluasi ini akan segera kami tindaklanjuti agar kualitas dan kemasan pesanan semakin baik.">+ Terima Kasih Evaluasi</button></div>
-                        </div>
-                        <textarea name="balasan" placeholder="Tulis balasan sopan dan ramah dari admin 2da Store..."></textarea>
-                        <div class="tpl bottom"><span>Template Cepat:</span><button type="button" data-tpl="Halo Kak {{ explode(' ', $r['nama'])[0] }}! Terima kasih banyak atas ulasannya. Kami senang sekali Kakak menikmati jajanan 2da Store. Ditunggu orderan berikutnya ya kak!">+ Tanggapan Ramah</button><button type="button" data-tpl="Terima kasih atas masukannya, Kak {{ explode(' ', $r['nama'])[0] }}. Evaluasi ini akan segera kami tindaklanjuti agar kualitas dan kemasan pesanan semakin baik.">+ Terima Kasih Evaluasi</button></div>
-                    </form>
                 @endif
+
+                <form class="form" id="reply-form-{{ $r->id }}" action="{{ route('admin.ulasan.balas', $r) }}" method="POST" {{ $r->sudah_dibalas ? 'hidden' : '' }}>
+                    @csrf
+                    <div class="fh">
+                        <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 016 6v3"/></svg>{{ $r->sudah_dibalas ? 'Edit Balasan' : 'Balas Ulasan Pelanggan' }}</span>
+                        <div class="tpl"><span>Template Cepat:</span><button type="button" data-tpl="Halo Kak {{ explode(' ', $r->nama)[0] }}! Terima kasih banyak atas ulasannya. Kami senang sekali Kakak menikmati jajanan 2da Store. Ditunggu orderan berikutnya ya kak!">+ Tanggapan Ramah</button><button type="button" data-tpl="Terima kasih atas masukannya, Kak {{ explode(' ', $r->nama)[0] }}. Evaluasi ini akan segera kami tindaklanjuti agar kualitas dan kemasan pesanan semakin baik.">+ Terima Kasih Evaluasi</button></div>
+                    </div>
+                    <textarea name="balasan" placeholder="Tulis balasan sopan dan ramah dari admin 2da Store...">{{ $r->sudah_dibalas ? $r->balasan : '' }}</textarea>
+                    <div class="tpl bottom">
+                        <span>Template Cepat:</span>
+                        <button type="button" data-tpl="Halo Kak {{ explode(' ', $r->nama)[0] }}! Terima kasih banyak atas ulasannya. Kami senang sekali Kakak menikmati jajanan 2da Store. Ditunggu orderan berikutnya ya kak!">+ Tanggapan Ramah</button>
+                        <button type="button" data-tpl="Terima kasih atas masukannya, Kak {{ explode(' ', $r->nama)[0] }}. Evaluasi ini akan segera kami tindaklanjuti agar kualitas dan kemasan pesanan semakin baik.">+ Terima Kasih Evaluasi</button>
+                        <button type="submit" style="margin-left:auto; background:var(--brown); color:#fff; border:0; padding:8px 16px; border-radius:8px; font-size:9.5px; font-weight:600; cursor:pointer;">Kirim Balasan</button>
+                    </div>
+                </form>
             </article>
-        @endforeach
+        @empty
+            <div class="card" style="padding:30px; text-align:center; color:var(--muted); font-size:12.5px; margin-top:19px;">
+                Belum ada ulasan yang cocok dengan filter ini.
+            </div>
+        @endforelse
 
         <div class="foot">
-            <span>Menampilkan 1 - 3 dari 486 total ulasan</span>
-            <div class="pager">
-                <span>‹</span><span class="on">1</span><span>2</span><span>3</span><span class="dots">...</span><span>49</span><span>›</span>
-            </div>
+            <span>Menampilkan {{ $ulasan->firstItem() ?? 0 }} - {{ $ulasan->lastItem() ?? 0 }} dari {{ $ulasan->total() }} total ulasan</span>
+            <div class="pager">{{ $ulasan->onEachSide(1)->links('vendor.pagination.pager') }}</div>
         </div>
 
     </main>
 </div>
 
 <script>
-    // Chip rating & segmen status: pindah kelas aktif (tampilan saja)
-    document.querySelectorAll('#ratingChips .fchip').forEach(function (chip) {
-        chip.addEventListener('click', function () {
-            document.querySelectorAll('#ratingChips .fchip').forEach(function (c) { c.classList.remove('active'); });
-            chip.classList.add('active');
-        });
-    });
-    document.querySelectorAll('#statusSeg button').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('#statusSeg button').forEach(function (b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-        });
-    });
-
     // Template cepat: isi otomatis kotak balasan
     document.querySelectorAll('.form').forEach(function (form) {
         var area = form.querySelector('textarea');
@@ -425,9 +389,27 @@
         });
     });
 
-    // Tombol sematkan: toggle tampilan
-    document.querySelectorAll('.r-tools .tool:first-child').forEach(function (btn) {
-        btn.addEventListener('click', function () { btn.classList.toggle('on'); });
+    // Tombol sematkan: simpan ke server via AJAX supaya benar-benar tersimpan
+    // dan langsung tampil di halaman testimoni user.
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    document.querySelectorAll('.tool-pin').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var id = btn.dataset.id;
+            fetch('/admin/ulasan/' + id + '/sematkan', {
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+            })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    btn.classList.toggle('on', data.is_pinned);
+                })
+                .catch(function () {
+                    alert('Gagal menyimpan status sematkan, coba lagi.');
+                });
+        });
     });
 </script>
 </body>

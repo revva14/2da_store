@@ -8,6 +8,11 @@
 --}}
 @php
   $tkData = collect($products ?? config('menu'))->map(function ($p, $slug) {
+      // Tabel `products` (dari admin) belum tentu punya kolom "options" (saus/topping).
+      // Kalau produk ini tidak bawa options-nya sendiri, ambil dari config/menu.php
+      // berdasarkan slug yang sama -- supaya variannya tetap muncul seperti di produklogin.
+      $options = $p['options'] ?? config("menu.$slug.options", []);
+
       return [
           'slug'    => $slug,
           'name'    => $p['name'],
@@ -15,7 +20,7 @@
           'rating'  => $p['rating'],
           'reviews' => $p['reviews'],
           'price'   => (int) $p['price'],
-          'options' => $p['options'] ?? [],
+          'options' => $options,
       ];
   })->all();
 @endphp

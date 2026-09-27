@@ -496,6 +496,12 @@
         <h2 class="login-form-title">Masuk ke Akun</h2>
         <p class="login-form-subtitle">Masuk untuk kumpulkan poin jajan &amp; nikmati promo diskon spesial.</p>
 
+        @if (session('success'))
+          <div class="login-flash-success" style="background:#e6f6ea; color:#1e7a34; border:1px solid #bfe6c9; border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:14px;">
+            {{ session('success') }}
+          </div>
+        @endif
+
         @if (Route::has('login.google'))
           <button type="button" class="btn-google" onclick="window.location.href='{{ route('login.google') }}'">
             <img src="{{ asset('images/google.png') }}" alt="Google" class="btn-icon"> Lanjut dengan Google

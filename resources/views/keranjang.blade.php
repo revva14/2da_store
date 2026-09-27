@@ -80,9 +80,12 @@
   }
 
   /* ---------- LAYOUT ---------- */
+  /* Hanya ada satu kolom (cart-main) di halaman ini, jadi dibuat 1fr penuh.
+     Sebelumnya "2fr 1fr" menyisakan kolom kedua kosong tanpa isi,
+     sehingga konten terlihat tidak full/mepet ke kiri saat keranjang kosong. */
   .cart-layout{
     display:grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr;
     gap: 20px;
     padding-bottom: 70px;
     align-items:start;
@@ -136,7 +139,7 @@
     display:flex;
     align-items:flex-start;
     gap: 14px;
-    width: 1070px;
+    width: 100%;
     box-shadow: 0 8px 20px -16px rgba(60,30,10,.2);
     transition: transform .18s ease, box-shadow .18s ease, opacity .2s ease;
   }
@@ -426,15 +429,42 @@
   }
   renderCart();
 
-  // Bar subtotal melayang di bawah layar; kalau halaman terlalu pendek (footer sudah kelihatan),
-  // bar ditempel di bawah daftar item supaya tidak tertutup/disembunyikan footer.
+  // Bar subtotal melayang di bawah layar; kalau seluruh isi halaman (termasuk andai bar ikut
+  // ditempel di alur) sudah muat dalam satu layar tanpa scroll, bar ditempel (docked) di bawah
+  // daftar item. Kalau halaman lebih panjang dari itu, bar mengambang mengikuti scroll dan baru
+  // disembunyikan saat sudah benar-benar discroll ke ujung bawah halaman.
+  //
+  // Dipakai tinggi total dokumen (document.documentElement.scrollHeight) vs tinggi layar --
+  // bukan posisi elemen <footer> -- supaya cuma ada SATU ukuran acuan. Versi sebelumnya
+  // membandingkan posisi footer dengan dua cara berbeda untuk menentukan "docked" dan
+  // "hide-on-footer", sehingga ada celah: halaman yang nyaris pas satu layar (mis. keranjang
+  // isi 2 produk) dianggap "tidak cukup pendek untuk docked" padahal footer-nya sudah kelihatan
+  // dikit di bawah, akibatnya bar disembunyikan tapi tidak pernah ditempel balik -> bar hilang
+  // total. Dengan satu formula, kasus ini tidak mungkin terjadi lagi.
   function layoutBar(){
-    const footerEl = document.querySelector('footer, .footer, #footer');
-    if (!footerEl || !cartFloatingBar) return;
-    const extra = cartFloatingBar.classList.contains('docked') ? cartFloatingBar.offsetHeight + 24 : 0;
-    const footerTop = footerEl.getBoundingClientRect().top + window.scrollY - extra;
-    cartFloatingBar.classList.toggle('docked', footerTop < window.innerHeight);
+    if (!cartFloatingBar) return;
+
+    const wasDocked = cartFloatingBar.classList.contains('docked');
+    const barSpace = cartFloatingBar.offsetHeight + 24; // tinggi bar + margin atasnya saat docked
+    // Tinggi total halaman TANPA kontribusi bar (karena saat docked, bar ikut menambah scrollHeight)
+    const contentHeight = wasDocked
+      ? document.documentElement.scrollHeight - barSpace
+      : document.documentElement.scrollHeight;
+
+    const fits = (contentHeight + barSpace) <= window.innerHeight;
+    cartFloatingBar.classList.toggle('docked', fits);
+
+    if (fits) {
+      cartFloatingBar.classList.remove('hide-on-footer');
+    } else {
+      // Halaman lebih panjang dari satu layar: sembunyikan hanya saat sudah discroll
+      // sampai benar-benar ke ujung bawah halaman (bukan sekadar footer mulai muncul).
+      const scrolledToBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 4);
+      cartFloatingBar.classList.toggle('hide-on-footer', scrolledToBottom);
+    }
   }
+
+  window.addEventListener('scroll', layoutBar, { passive: true });
   window.addEventListener('resize', layoutBar);
   window.addEventListener('load', layoutBar);
 
@@ -528,27 +558,5 @@
       .map(function (i) { return i.dataset.id; });
     TwodaCart.setCheckout(ids);
   });
-    // Ganti atau hilangkan fungsi initHideOnFooter
-(function initHideOnFooter(){
-  const footerEl = document.querySelector('footer, .footer, #footer');
-  if (!footerEl || !cartFloatingBar || !('IntersectionObserver' in window)) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      // Pastikan hanya menyembunyikan jika tidak dalam kondisi docked
-      if (!cartFloatingBar.classList.contains('docked')) {
-        cartFloatingBar.classList.toggle('hide-on-footer', entry.isIntersecting);
-      } else {
-        cartFloatingBar.classList.remove('hide-on-footer');
-      }
-    });
-  }, {
-    root: null,
-    threshold: 0,
-    rootMargin: '0px 0px 0px 0px'
-  });
-
-  observer.observe(footerEl);
-})();
 </script>
 @endpush

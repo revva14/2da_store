@@ -1,15 +1,5 @@
-{{--
-  Sidebar akun (profil + menu). Dipakai di halaman: biodata, alamat, riwayat, pengaturan.
-  Pemakaian:  @include('partials.sidebarakun', ['active' => 'biodata'])
-  Nilai active: biodata | alamat | riwayat | pengaturan
-  (kalau tidak diisi, menu aktif ditentukan otomatis dari URL)
-
-  Kotak "Koin Didapat": 10 koin untuk setiap pesanan yang sudah diulas.
-  Angkanya dihitung di halaman Riwayat (dari kartu pesanan yang berstatus "Sudah diulas"),
-  disimpan di localStorage 'twoda_coins', lalu dibaca di sini supaya sama di semua halaman akun.
-  (nanti tinggal diganti data dari database)
---}}
 @php
+  $user = $user ?? auth()->user();
   $active = $active ?? null;
   $isActive = fn($key) => $active ? $active === $key : request()->is($key, $key.'/*');
 
@@ -19,6 +9,19 @@
       ? __('akun.coins_earned') : ($isEn ? 'Coins Earned' : 'Koin Didapat');
   $coinTpl   = \Illuminate\Support\Facades\Lang::has('akun.coins_value')
       ? __('akun.coins_value', ['count' => '{n}']) : ($isEn ? '{n} Coins' : '{n} Koin');
+  // Total Pesanan: kalau dikirim manual dari halaman (biodata/alamat, masih dummy) pakai itu,
+  // kalau halaman riwayat pakai jumlah $orders (dummy), selain itu pakai data transaksi asli.
+  $totalPesanan = $totalPesanan ?? (isset($orders) ? $orders->count() : $user->transaksi()->count());
+
+  // Badge "Bergabung sejak ..." -- pakai tanggal registrasi asli (created_at), bukan teks statis.
+  $joinedDate  = $user->created_at
+      ? $user->created_at->locale(app()->getLocale())->translatedFormat('F Y')
+      : null;
+  $joinedLabel = $joinedDate
+      ? (\Illuminate\Support\Facades\Lang::has('akun.joined_since')
+          ? __('akun.joined_since', ['date' => $joinedDate])
+          : ($isEn ? 'Joined since '.$joinedDate : 'Bergabung sejak '.$joinedDate))
+      : __('akun.joined');
 @endphp
 
 @push('styles')
@@ -134,16 +137,16 @@
 <aside>
   <div class="profile-card">
     <div class="profile-avatar">
-      <img src="{{ asset('images/profil-reva.jpg') }}" alt="{{ __('akun.avatar_alt', ['name' => 'Reva Aulia A.']) }}">
+      <img src="{{ $user->photo ? asset('storage/'.$user->photo) : asset('images/profil-reva.jpg') }}" alt="{{ __('akun.avatar_alt', ['name' => $user->name]) }}">
     </div>
-    <h2 class="profile-name">Reva Aulia A.</h2>
-    <p class="profile-email">revanjai@email.com</p>
-    <span class="profile-badge">{{ __('akun.joined') }}</span>
+    <h2 class="profile-name">{{ $user->name }}</h2>
+    <p class="profile-email">{{ $user->email }}</p>
+    <span class="profile-badge">{{ $joinedLabel }}</span>
 
     <div class="profile-stats">
       <div class="stat-box">
         <span class="stat-label">{{ __('akun.total_orders') }}</span>
-        <span class="stat-value">{{ __('akun.menu_count', ['count' => 38]) }}</span>
+        <span class="stat-value">{{ __('akun.menu_count', ['count' => $totalPesanan]) }}</span>
       </div>
       <div class="stat-box">
         <span class="stat-label">{{ $coinLabel }}</span>
@@ -173,10 +176,13 @@
       {{ __('akun.menu_settings') }}
       <svg class="menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
     </a>
-    <a href="/logout" class="account-menu-item logout">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      {{ __('akun.menu_logout') }}
-    </a>
+    <form action="{{ url('/logout') }}" method="POST" class="logout-form" style="display:contents;">
+      @csrf
+      <a href="#" class="account-menu-item logout" onclick="event.preventDefault(); this.closest('form').submit();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        {{ __('akun.menu_logout') }}
+      </a>
+    </form>
   </nav>
 </aside>
 

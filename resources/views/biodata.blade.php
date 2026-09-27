@@ -301,7 +301,8 @@
       <div class="account-grid">
 
         <!-- SIDEBAR -->
-        @include('partials.sidebarakun', ['active' => 'biodata'])
+        {{-- totalPesanan: dummy sementara, samakan dgn jumlah $orders di route /riwayat (web.php) --}}
+        @include('partials.sidebarakun', ['active' => 'biodata', 'user' => $user, 'totalPesanan' => 5])
 
         <!-- MAIN -->
         <div class="account-main">
@@ -387,29 +388,29 @@
             <div class="info-grid">
               <div class="info-field">
                 <span class="field-label">{{ __('biodata.full_name') }}</span>
-                <span class="field-value" data-key="name" data-type="text">Reva Aulia A.</span>
+                <span class="field-value" data-key="name" data-type="text">{{ $user->name }}</span>
               </div>
               <div class="info-field">
                 <span class="field-label">{{ __('biodata.phone') }}</span>
-                <span class="field-value" data-key="phone" data-type="tel">+62 831-2965-6565</span>
+                <span class="field-value" data-key="phone" data-type="tel">{{ $user->phone ?: '-' }}</span>
                 <span class="field-verified">{{ __('biodata.verified') }}</span>
               </div>
               <div class="info-field">
                 <span class="field-label">{{ __('biodata.email') }}</span>
-                <span class="field-value" data-key="email" data-type="email">revanjai@email.com</span>
+                <span class="field-value" data-key="email" data-type="email">{{ $user->email }}</span>
                 <span class="field-verified">{{ __('biodata.verified') }}</span>
               </div>
               <div class="info-field">
                 <span class="field-label">{{ __('biodata.birthdate') }}</span>
-                <span class="field-value" data-key="birthdate" data-type="text">{{ __('biodata.birthdate_value') }}</span>
+                <span class="field-value" data-key="birthdate" data-type="date" data-raw="{{ $user->birthdate ? \Carbon\Carbon::parse($user->birthdate)->format('Y-m-d') : '' }}">{{ $user->birthdate ? \Carbon\Carbon::parse($user->birthdate)->format('d F Y') : '-' }}</span>
               </div>
               <div class="info-field">
                 <span class="field-label">{{ __('biodata.gender') }}</span>
-                <span class="field-value" data-key="gender" data-type="select" data-options="{{ json_encode([__('biodata.gender_female'), $bt('gender_male', 'Laki-laki')]) }}">{{ __('biodata.gender_female') }}</span>
+                <span class="field-value" data-key="gender" data-type="select" data-options="{{ json_encode([__('biodata.gender_female'), $bt('gender_male', 'Laki-laki')]) }}">{{ $user->gender ?: '-' }}</span>
               </div>
               <div class="info-field">
                 <span class="field-label">{{ __('biodata.delivery_pref') }}</span>
-                <span class="field-value" data-key="delivery" data-type="textarea">Taruh di meja resepsionis / depan pagar jika tak ada orang</span>
+                <span class="field-value" data-key="delivery" data-type="textarea">{{ $user->delivery_preference ?: '-' }}</span>
               </div>
             </div>
           </div>
@@ -434,6 +435,7 @@
       editing = true;
       values.forEach(function(el){
         var current = el.textContent.trim();
+        var raw = el.dataset.raw !== undefined ? el.dataset.raw : (current === '-' ? '' : current);
         var input;
         if (el.dataset.type === 'textarea') {
           input = document.createElement('textarea');
@@ -442,7 +444,7 @@
           input = document.createElement('select');
           var opts = [];
           try { opts = JSON.parse(el.dataset.options || '[]'); } catch(e) {}
-          if (opts.indexOf(current) === -1) opts.unshift(current);
+          if (raw && opts.indexOf(raw) === -1) opts.unshift(raw);
           opts.forEach(function(text){
             var o = document.createElement('option');
             o.value = text;
@@ -454,9 +456,10 @@
           input.type = el.dataset.type || 'text';
         }
         input.className = 'field-input';
-        input.value = current;
+        input.value = raw;
+        if (el.dataset.key === 'email') { input.disabled = true; }
         input.dataset.key = el.dataset.key;
-        input.dataset.original = current;
+        input.dataset.original = raw;
         el.style.display = 'none';
         el.parentNode.insertBefore(input, el.nextSibling);
       });
@@ -467,30 +470,62 @@
       if (first) first.focus();
     }
 
-    function stopEdit(save){
+    async function stopEdit(save){
       var inputs = document.querySelectorAll('.info-grid .field-input');
-      if (save) {
-        var ok = true;
+      if (!save) {
         inputs.forEach(function(inp){
-          var empty = inp.value.trim() === '';
-          inp.classList.toggle('invalid', empty);
-          if (empty) ok = false;
+          var span = inp.previousElementSibling;
+          span.style.display = '';
+          inp.remove();
         });
-        if (!ok) return; // ada field kosong -> tetap di mode edit
+        editing = false;
+        labelEl.textContent = editBtn.dataset.labelEdit;
+        editBtn.classList.remove('btn-primary-sm');
+        cancelBtn.hidden = true;
+        return;
       }
-      inputs.forEach(function(inp){
-        var span = inp.previousElementSibling;
-        if (save) span.textContent = inp.value.trim();
-        span.style.display = '';
-        inp.remove();
-      });
-      editing = false;
-      labelEl.textContent = editBtn.dataset.labelEdit;
-      editBtn.classList.remove('btn-primary-sm');
-      cancelBtn.hidden = true;
 
-      // TODO: kirim ke backend saat route simpan biodata sudah ada, mis.:
-      // fetch('/akun/biodata', { method:'POST', headers:{'X-CSRF-TOKEN':'{{ csrf_token() }}','Content-Type':'application/json'}, body: JSON.stringify(data) });
+      var data = {};
+      var ok = true;
+      inputs.forEach(function(inp){
+        var key = inp.dataset.key;
+        var value = inp.value.trim();
+        // Email berasal dari akun login dan tidak diedit dari halaman ini.
+        if (key !== 'email') {
+          data[key] = value;
+        }
+      });
+      if (!ok) return;
+
+      try {
+        var response = await fetch('{{ route('biodata.update') }}', {
+          method: 'PUT',
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        var result = await response.json();
+        if (!response.ok || !result.ok) {
+          throw new Error(result.message || 'Gagal menyimpan data profil.');
+        }
+
+        inputs.forEach(function(inp){
+          var span = inp.previousElementSibling;
+          var key = inp.dataset.key;
+          if (key !== 'email') span.textContent = inp.value.trim();
+          span.style.display = '';
+          inp.remove();
+        });
+        editing = false;
+        labelEl.textContent = editBtn.dataset.labelEdit;
+        editBtn.classList.remove('btn-primary-sm');
+        cancelBtn.hidden = true;
+      } catch (error) {
+        alert(error.message || 'Data profil gagal disimpan.');
+      }
     }
 
     editBtn.addEventListener('click', function(){

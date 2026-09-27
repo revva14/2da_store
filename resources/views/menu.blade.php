@@ -5,8 +5,10 @@
 @php
   $imgFolder = 'images/';
 
-  // Data produk ada di config/menu.php (dipakai juga oleh halaman detail)
-  $products = config('menu');
+  // Data produk sekarang diambil dari tabel products (App\Models\Product),
+  // bukan config/menu.php lagi -- supaya sinkron dengan yang di-CRUD di admin.
+  // Hanya produk yang is_active = true yang tampil ke customer.
+  $products = \App\Models\Product::where('is_active', true)->orderBy('name')->get()->keyBy('slug');
 
   $totalProducts = count($products);
 @endphp

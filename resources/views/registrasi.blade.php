@@ -595,6 +595,9 @@
             <input type="checkbox" name="agreement" required>
             <span>Saya setuju dengan <a href="/syarat-ketentuan" class="link-orange" target="_blank" rel="noopener">Syarat &amp; Ketentuan</a> serta <a href="/kebijakan-privasi" class="link-orange" target="_blank" rel="noopener">Kebijakan Privasi</a> 2DA STORE.</span>
           </label>
+          @error('agreement')
+            <small class="field-error">{{ $message }}</small>
+          @enderror
 
           <button type="submit" class="btn-submit">Daftar Sekarang →</button>
         </form>

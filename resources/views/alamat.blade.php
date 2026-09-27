@@ -290,7 +290,8 @@
       <div class="account-grid">
 
         <!-- SIDEBAR -->
-        @include('partials.sidebarakun', ['active' => 'alamat'])
+        {{-- totalPesanan: dummy sementara, samakan dgn jumlah $orders di route /riwayat (web.php) --}}
+        @include('partials.sidebarakun', ['active' => 'alamat', 'totalPesanan' => 5])
 
         <!-- MAIN -->
         <div class="account-main">

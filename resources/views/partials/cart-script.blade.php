@@ -84,18 +84,28 @@
         write(KEY_CHECKOUT, read(KEY_CHECKOUT, []).filter(function (k) { return k !== key; }));
       },
 
+      removeMany: function (keys) {
+        keys = keys || [];
+        write(KEY, all().filter(function (i) { return keys.indexOf(i.id) === -1 && keys.indexOf(i.key) === -1; }));
+        write(KEY_CHECKOUT, []);
+      },
+
       count: function () {
         return all().reduce(function (s, i) { return s + i.qty; }, 0);
       },
 
       clear: function () {
-        write(KEY, []);
-        write(KEY_CHECKOUT, []);
-      },
+    write(KEY, []);
+    write(KEY_CHECKOUT, []);
+},
 
-      // item yang dicentang untuk lanjut ke pembayaran (dipanggil halaman keranjang)
-      setCheckout: function (keys) { write(KEY_CHECKOUT, keys || []); },
-      checkout: function () { return read(KEY_CHECKOUT, []); },
+clearCheckout: function () {
+    write(KEY_CHECKOUT, []);
+},
+
+// item yang dicentang untuk lanjut ke pembayaran
+setCheckout: function (keys) { write(KEY_CHECKOUT, keys || []); },
+checkout: function () { return read(KEY_CHECKOUT, []); },
       checkoutItems: function () {
         var keys = read(KEY_CHECKOUT, []);
         return all().filter(function (i) { return keys.indexOf(i.key) !== -1; });

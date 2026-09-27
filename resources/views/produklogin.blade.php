@@ -320,6 +320,12 @@
   }
   .pd-add:hover{ background:#843C00; box-shadow: 0 16px 26px -10px rgba(122,59,18,.65); }
   .pd-add:active{ transform: scale(.98); }
+  .pd-add.pop, .pd-mini-btn.pop{ animation: pdPop .35s ease; }
+  @keyframes pdPop{
+    0%{ transform:scale(1); }
+    45%{ transform:scale(1.06); }
+    100%{ transform:scale(1); }
+  }
 
   /* ---------- PRODUK LAINNYA ---------- */
   .pd-more{
@@ -455,8 +461,7 @@
   {{-- ===================== DETAIL PRODUK ===================== --}}
   <section class="pd-detail">
     <div class="container">
-      <form class="pd-grid" id="orderForm" method="POST" action="{{ url('/keranjang/tambah') }}">
-        @csrf
+      <form class="pd-grid" id="orderForm" onsubmit="return false;">
         <input type="hidden" name="produk" value="{{ $slug }}">
 
         {{-- KIRI: gambar --}}
@@ -569,7 +574,6 @@
             </div>
 
             <button type="submit" class="pd-add">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2.5l2.2 11.2a1.6 1.6 0 0 0 1.6 1.3h9.2a1.6 1.6 0 0 0 1.6-1.2L21 7H8"/><path d="M13 4v4M11 6h4"/></svg>
               + Masukkan ke Keranjang
             </button>
           </div>
@@ -614,13 +618,17 @@
 @endsection
 
 @push('scripts')
+{{-- PRODUCTS & TwodaCart (localStorage) -- sama seperti dipakai di katalog menu & halaman keranjang --}}
+@include('partials.cart-script')
 <script>
   (function () {
+    const SLUG      = @json($slug);
     const BASE_PRICE = {{ (int) $product['price'] }};
     const form      = document.getElementById('orderForm');
     const qtyValue  = document.getElementById('qtyValue');
     const qtyInput  = document.getElementById('qtyInput');
     const subtotal  = document.getElementById('subtotal');
+    const addBtn    = form.querySelector('.pd-add');
     let qty = 1;
 
     const rupiah = (n) => 'Rp ' + n.toLocaleString('id-ID');
@@ -643,8 +651,37 @@
       qty++; recalc();
     });
 
-
     recalc();
+
+    // ---------- Masukkan ke Keranjang (pakai TwodaCart, sama seperti di katalog) ----------
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const opts = Array.from(form.querySelectorAll('input[data-extra]:checked')).map(function (el) {
+        return { name: el.value, extra: parseInt(el.dataset.extra, 10) || 0 };
+      });
+
+      TwodaCart.add(SLUG, qty, opts);
+
+      addBtn.classList.remove('pop');
+      void addBtn.offsetWidth; // restart animasi
+      addBtn.classList.add('pop');
+
+      // Arahkan ke halaman keranjang supaya produk langsung kelihatan masuk
+      window.location.href = "{{ url('/keranjang') }}";
+    });
+
+    // ---------- Tombol "Tambah Pendamping" di kartu produk lainnya ----------
+    document.querySelectorAll('.pd-mini-btn[data-produk]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        TwodaCart.add(btn.dataset.produk, 1, []);
+
+        btn.classList.remove('pop');
+        void btn.offsetWidth;
+        btn.classList.add('pop');
+      });
+    });
   })();
 </script>
 @endpush

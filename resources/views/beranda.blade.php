@@ -90,7 +90,7 @@
         <div class="testi-card reveal">
           <blockquote>"{{ __('home.testi1_quote') }}"</blockquote>
           <div class="testi-author">
-            <div class="avatar"></div>
+            <div class="avatar">BS</div>
             <div>
               <div class="name">Budi Santoso</div>
               <div class="role">{{ __('home.testi1_role') }}</div>
@@ -101,7 +101,7 @@
         <div class="testi-card reveal">
           <blockquote>"{{ __('home.testi2_quote') }}"</blockquote>
           <div class="testi-author">
-            <div class="avatar"></div>
+            <div class="avatar">SR</div>
             <div>
               <div class="name">Siti Rahma</div>
               <div class="role">{{ __('home.testi2_role') }}</div>
@@ -111,6 +111,18 @@
       </div>
     </div>
   </section>
+
+  <style>
+    .testi-author .avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,.15);
+    }
+  </style>
 
 @endsection
 

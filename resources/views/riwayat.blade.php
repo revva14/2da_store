@@ -91,6 +91,8 @@
     color: var(--orange-dark);
   }
   .link-review svg{ width:15px; height:15px; fill: var(--orange-dark); }
+  a.link-review{ cursor:pointer; }
+  a.link-review:hover{ text-decoration:underline; }
 
   /* ---------- BILLING SUMMARY CARD ---------- */
   .billing-card{
@@ -382,6 +384,260 @@
     .filter-search{ justify-content:stretch; }
     .search-box{ max-width:none; }
   }
+
+  /* ---------- MODAL: FORM ULASAN ---------- */
+  .modal-ulasan-overlay{
+    position:fixed; inset:0;
+    background:rgba(40,20,8,.45);
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    z-index:200;
+  }
+  .modal-ulasan-overlay[hidden]{ display:none; }
+  .modal-ulasan{
+    position:relative;
+    background: var(--white);
+    width:100%; max-width:620px;
+    max-height:90vh;
+    overflow-y:auto;
+    border-radius:16px;
+    padding:34px 34px 28px;
+    box-shadow:0 30px 60px -20px rgba(40,20,8,.45);
+  }
+  .modal-ulasan::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:6px;
+    border-radius:16px 16px 0 0;
+    background:linear-gradient(90deg, var(--orange), var(--orange-dark), var(--orange));
+  }
+  .modal-ulasan-close{
+    position:absolute; top:22px; right:22px;
+    width:30px; height:30px;
+    display:flex; align-items:center; justify-content:center;
+    color: var(--ink-soft);
+    border-radius:50%;
+    transition: background .2s ease, color .2s ease;
+  }
+  .modal-ulasan-close:hover{ background: var(--cream-soft); color: var(--ink); }
+  .modal-ulasan-close svg{ width:18px; height:18px; }
+
+  .modal-ulasan-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    background:#fdebd9; color: var(--orange-dark);
+    font-size:11px; font-weight:700;
+    padding:6px 14px;
+    border-radius: var(--radius-pill);
+    margin-bottom:14px;
+  }
+  .modal-ulasan-badge svg{ width:12px; height:12px; fill: var(--orange-dark); }
+
+  .modal-ulasan h2{
+    font-family: var(--font-display);
+    font-weight:800;
+    font-size:22px;
+    color: var(--ink);
+    margin-bottom:6px;
+  }
+  .modal-ulasan-sub{
+    font-size:12.5px;
+    color: var(--ink-soft);
+    margin-bottom:22px;
+  }
+  .modal-ulasan-sub strong{ color: var(--ink); }
+
+  .modal-ulasan-order{
+    display:flex; align-items:center; gap:14px;
+    background: var(--cream-soft);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:26px;
+  }
+  .modal-ulasan-order-icon{
+    width:38px; height:38px; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    background:#fdebd9; color: var(--orange-dark);
+    border-radius:10px;
+  }
+  .modal-ulasan-order-icon svg{ width:18px; height:18px; }
+  .modal-ulasan-order-items{ flex:1 1 auto; min-width:0; }
+  .modal-ulasan-order-items p{
+    font-size:12.5px;
+    color: var(--ink);
+    margin-bottom:2px;
+  }
+  .modal-ulasan-order-items p:last-child{ margin-bottom:0; }
+  .modal-ulasan-order-items strong{ font-weight:700; }
+  .modal-ulasan-order-total{ text-align:right; flex:none; }
+  .modal-ulasan-order-total .value{
+    display:block;
+    font-family: var(--font-display);
+    font-weight:700;
+    font-size:15px;
+    color: var(--orange-dark);
+  }
+  .modal-ulasan-order-total .count{
+    display:block;
+    font-size:9.5px;
+    letter-spacing:.05em;
+    color: var(--ink-soft);
+    margin-top:3px;
+  }
+
+  .modal-ulasan-block{ margin-bottom:24px; }
+  .modal-ulasan-label{
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    color: var(--ink);
+  }
+  .modal-ulasan-label.center{ text-align:center; margin-bottom:16px; }
+  .modal-ulasan-label .soft{
+    font-weight:600;
+    text-transform:none;
+    letter-spacing:0;
+    color: var(--ink-soft);
+  }
+  .modal-ulasan-label-row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:8px;
+  }
+  .modal-ulasan-counter{ font-size:11px; color: var(--ink-soft); }
+
+  .modal-ulasan-stars{
+    display:flex; justify-content:center; gap:8px;
+    margin-bottom:10px;
+  }
+  .modal-ulasan-stars .star{
+    width:38px; height:38px;
+    color:#e2d6c8;
+    transition: color .15s ease, transform .1s ease;
+  }
+  .modal-ulasan-stars .star svg{ width:100%; height:100%; }
+  .modal-ulasan-stars .star:hover{ transform:scale(1.08); }
+  .modal-ulasan-stars .star.filled{ color:#f5a623; }
+  .modal-ulasan-rating-text{
+    text-align:center;
+    font-size:13px;
+    font-weight:600;
+    color: var(--ink-soft);
+  }
+  .modal-ulasan-rating-text[hidden]{ display:none; }
+  .modal-ulasan-rating-text .num{ color: var(--orange-dark); font-weight:800; }
+  .modal-ulasan-rating-warning{
+    text-align:center;
+    font-size:12px;
+    font-weight:600;
+    color:#c0392b;
+    margin-top:8px;
+  }
+  .modal-ulasan-rating-warning[hidden]{ display:none; }
+
+  .modal-ulasan-chips{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin-top:12px;
+  }
+  .modal-ulasan-chips .chip{
+    display:inline-flex; align-items:center; gap:6px;
+    background: var(--cream-soft);
+    border:1.5px solid transparent;
+    color: var(--ink);
+    font-size:12px; font-weight:600;
+    padding:8px 16px;
+    border-radius: var(--radius-pill);
+    transition: border-color .2s ease, background .2s ease, color .2s ease;
+  }
+  .modal-ulasan-chips .chip:hover{ background:#f0e4d6; }
+  .modal-ulasan-chips .chip .chip-check{ display:none; width:13px; height:13px; }
+  .modal-ulasan-chips .chip.selected{
+    background:#fdf3e8;
+    border-color: var(--orange);
+    color: var(--orange-dark);
+  }
+  .modal-ulasan-chips .chip.selected .chip-check{ display:inline-block; }
+
+  #ulasanText{
+    width:100%;
+    border:1.5px solid #e6d6c8;
+    border-radius:10px;
+    padding:14px 16px;
+    font-size:12.5px;
+    color: var(--ink);
+    resize:vertical;
+    min-height:90px;
+    font-family:inherit;
+  }
+  #ulasanText:focus{ outline:2px solid rgba(217,119,55,.2); border-color: var(--orange); }
+  #ulasanText::placeholder{ color:#b7a596; }
+
+  .modal-ulasan-photos{ display:flex; align-items:center; gap:16px; margin-top:12px; flex-wrap:wrap; }
+  .photo-add{
+    width:78px; height:78px; flex:none;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    border:1.5px dashed #d8c4b0;
+    border-radius:10px;
+    color: var(--ink-soft);
+    font-size:10.5px; font-weight:600;
+    cursor:pointer;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .photo-add:hover{ border-color: var(--orange); background: var(--cream-soft); }
+  .photo-add svg{ width:18px; height:18px; }
+  .photo-hint p{ font-size:11.5px; color: var(--ink-soft); margin-bottom:2px; }
+  .photo-hint p:last-child{ margin-bottom:0; }
+  .photo-hint strong{ color: var(--ink); }
+  .photo-thumb{
+    position:relative;
+    width:78px; height:78px; flex:none;
+    border-radius:10px; overflow:hidden;
+  }
+  .photo-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .photo-thumb button{
+    position:absolute; top:4px; right:4px;
+    width:18px; height:18px;
+    background:rgba(0,0,0,.55); color:#fff;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .photo-thumb button svg{ width:10px; height:10px; }
+
+  .modal-ulasan-toggle-row{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding-top:18px; margin-bottom:22px;
+    border-top:1px solid rgba(122,59,18,.1);
+  }
+  .modal-ulasan-toggle-row .soft.small{ font-size:11px; color: var(--ink-soft); margin-top:2px; }
+  .switch{ position:relative; display:inline-block; width:40px; height:22px; flex:none; }
+  .switch input{ opacity:0; width:0; height:0; }
+  .switch .slider{
+    position:absolute; inset:0;
+    background:#e2d6c8; border-radius: var(--radius-pill);
+    transition: background .2s ease;
+    cursor:pointer;
+  }
+  .switch .slider::before{
+    content:""; position:absolute;
+    width:16px; height:16px; left:3px; top:3px;
+    background:#fff; border-radius:50%;
+    transition: transform .2s ease;
+  }
+  .switch input:checked + .slider{ background: var(--orange); }
+  .switch input:checked + .slider::before{ transform:translateX(18px); }
+
+  .modal-ulasan-actions{
+    display:flex; align-items:center; justify-content:flex-end; gap:12px;
+    padding-top:20px;
+    border-top:1px solid rgba(122,59,18,.14);
+  }
+  .modal-ulasan-actions .btn-primary-sm svg{ width:14px; height:14px; }
+
+  @media (max-width:560px){
+    .modal-ulasan{ padding:26px 20px 22px; }
+    .modal-ulasan-order{ flex-wrap:wrap; }
+    .modal-ulasan-order-total{ text-align:left; }
+    .modal-ulasan-actions{ flex-direction:column-reverse; align-items:stretch; }
+    .modal-ulasan-actions .btn-outline-sm, .modal-ulasan-actions .btn-primary-sm{ justify-content:center; }
+  }
 </style>
 @endpush
 
@@ -434,682 +690,252 @@
             </div>
           </div>
 
-          <!-- DAFTAR PESANAN -->
+<!-- DAFTAR PESANAN -->
 
-          <!-- Pesanan #1: Dalam Pengantaran -->
-          <div class="riwayat-card highlight" data-date="{{ now()->toDateString() }}">
-            <div class="riwayat-top">
-              <div>
+@forelse($orders as $order)
+
+    @php
+        $statusClass = match ($order->status) {
+            'selesai' => 'success',
+            'batal' => 'cancelled',
+            default => 'progress',
+        };
+
+        $statusText = match ($order->status) {
+            'baru' => 'Menunggu',
+            'dapur' => 'Sedang Diproses',
+            'antar' => 'Dalam Pengantaran',
+            'selesai' => 'Selesai',
+            'batal' => 'Dibatalkan',
+            default => 'Menunggu',
+        };
+
+        $paymentText = match ($order->metode_pembayaran) {
+            'qris' => 'QRIS',
+            'va' => 'Virtual Account',
+            'cod' => 'COD',
+            default => strtoupper($order->metode_pembayaran ?? '-'),
+        };
+
+        $paymentStatus = match ($order->payment_status) {
+            'settlement',
+            'capture',
+            'paid' => 'Pembayaran berhasil',
+
+            'cancel',
+            'cancelled' => 'Pembayaran dibatalkan',
+
+            default => 'Menunggu pembayaran',
+        };
+    @endphp
+
+    <div
+        class="riwayat-card"
+        data-date="{{ $order->created_at->format('Y-m-d') }}"
+    >
+
+        <div class="riwayat-top">
+
+            <div>
                 <div class="riwayat-id-row">
-                  <h3>#2DA-89211</h3>
-                  <span class="status-badge progress">{{ __('riwayat.status_delivering') }}</span>
+
+                    <h3>#{{ $order->no_pesanan }}</h3>
+
+                    <span class="status-badge {{ $statusClass }}">
+                        {{ $statusText }}
+                    </span>
+
                 </div>
-                <p class="riwayat-meta">{{ __('riwayat.today') }}, 11:20 WIB &bull; Tebet Barat Dalam VI (Rumah Tinggal)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value accent">Rp 25.000</span>
-                <span class="pay-status">{{ __('riwayat.pay_qris_paid') }}</span>
-              </div>
+
+                <p class="riwayat-meta">
+                    {{ $order->created_at->locale(app()->getLocale())->translatedFormat('j M Y, H:i') }}
+                    WIB
+                    &bull;
+                    {{ $order->alamat }}
+                </p>
             </div>
 
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>2x Corndog Mini Mozarella</strong> (Saos Sambal &amp; Mayo Gurih)</p>
-                <p><strong>1x Cireng Isi Mini</strong> (Bumbu Tabur Pedas)</p>
-              </div>
-              <div class="riwayat-courier">
-                <p class="name">{{ __('riwayat.courier', ['name' => 'Kang Rahmat']) }}</p>
-                <p class="detail">Honda Vario &bull; {{ __('riwayat.eta_8min') }}</p>
-              </div>
+            <div class="riwayat-total">
+
+                <span class="label">
+                    {{ __('riwayat.total_bill') }}
+                </span>
+
+                <span class="value">
+                    Rp {{ number_format($order->total, 0, ',', '.') }}
+                </span>
+
+                <span class="pay-status">
+                    {{ $paymentText }}
+                    &bull;
+                    {{ $paymentStatus }}
+                </span>
+
             </div>
 
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.invoice_no') }} INV/20241018/2DA/89211
-              </span>
-              <div class="riwayat-actions">
-                <a href="#" class="btn-outline-sm" data-modal-open="modalDetailPesanan">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1"/><path d="M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
-                  {{ __('riwayat.detail_invoice') }}
-                </a>
-              </div>
-            </div>
-          </div>
+        </div>
 
-          <!-- Pesanan #2: Selesai -->
-          <div class="riwayat-card" data-date="{{ now()->subDay()->toDateString() }}">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-87104</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
+
+        <div class="riwayat-body">
+
+            <div class="riwayat-items">
+
+                @foreach($order->items as $item)
+
+                    <p>
+                        <strong>
+                            {{ $item->qty }}x
+                            {{ $item->nama_produk ?? 'Produk' }}
+                        </strong>
+                    </p>
+
+                @endforeach
+
+            </div>
+
+
+            @if($order->status === 'antar')
+
+                <div class="riwayat-courier">
+
+                    <p class="name">
+                        Dalam Pengantaran
+                    </p>
+
+                    <p class="detail">
+                        {{ $order->metode_pengiriman }}
+                    </p>
+
                 </div>
-                <p class="riwayat-meta">{{ __('riwayat.yesterday') }}, 14:15 WIB &bull; Kantor Menara Karya (Studio)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 35.000</span>
-                <span class="pay-status">{{ __('riwayat.pay_qris_paid') }}</span>
-              </div>
-            </div>
 
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>2x Corndog Mini Mozarella</strong> (Saus Sambal)</p>
-                <p><strong>1x Cireng Isi Mini + 2x Pop Ice Chocolate</strong></p>
-              </div>
-              <span class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.rated') }}
-              </span>
-            </div>
+            @elseif($order->status === 'selesai')
 
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.received_reception') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-87104" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
+                @if(!empty($order->rating))
 
-          <!-- Pesanan #3: Selesai -->
-          <div class="riwayat-card" data-date="2024-10-12">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-84920</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
+                    <span class="link-review">
+
+                        <svg viewBox="0 0 20 20">
+                            <path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/>
+                        </svg>
+
+                        {{ $rt('rated', 'Sudah Dinilai') }}: {{ number_format($order->rating->nilai, 1) }}
+                        ({{ $order->rating->label }})
+
+                    </span>
+
+                @else
+
+                    <a href="#" class="link-review" data-review-open>
+
+                        <svg viewBox="0 0 20 20">
+                            <path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/>
+                        </svg>
+
+                        {{ __('riwayat.write_review') }}
+
+                    </a>
+
+                @endif
+
+            @endif
+
+        </div>
+
+
+        <div class="riwayat-footer">
+
+            <span class="riwayat-invoice-note">
+
+                @if($order->status === 'batal')
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <circle cx="12" cy="12" r="9"/>
+                        <line x1="15" y1="9" x2="9" y2="15"/>
+                        <line x1="9" y1="9" x2="15" y2="15"/>
+                    </svg>
+
+                    Pesanan dibatalkan sebelum diproses
+
+                @else
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M9 12l2 2 4-4"/>
+                        <circle cx="12" cy="12" r="9"/>
+                    </svg>
+
+                    {{ __('riwayat.invoice_no') }}
+                    {{ $order->no_pesanan }}
+
+                @endif
+
+            </span>
+
+
+            @if($order->status === 'batal')
+
+                <div class="riwayat-actions">
+
+                    <a href="/menulogin" class="btn-soft-sm">
+
+                        <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M1 4v6h6"/>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                        </svg>
+
+                        {{ __('riwayat.order_again') }}
+
+                    </a>
+
                 </div>
-                <p class="riwayat-meta">{{ __('riwayat.sample_date') }}, 19:30 WIB &bull; Tebet Barat Dalam VI</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 10.000</span>
-                <span class="pay-status muted">{{ __('riwayat.pay_cod_done') }}</span>
-              </div>
+
+            @endif
+
+        </div>
+
+    </div>
+
+@empty
+
+    <div class="riwayat-card">
+
+        <div class="riwayat-body">
+
+            <div class="riwayat-items">
+
+                <p>
+                    Belum ada pesanan.
+                </p>
+
             </div>
 
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>1x Corndog Mini Mozarella</strong> (Saus Mayo)</p>
-                <p><strong>1x Ice Good Day Freeze</strong> (Extra Ice)</p>
-              </div>
-              <a href="/form-pesanan?pesanan=2DA-84920" class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.write_review') }}
-              </a>
-            </div>
+        </div>
 
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.invoice_no') }} INV/20241012/2DA/84920
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-84920" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
+    </div>
 
-          <!-- Pesanan: Selesai (2024-10-10) -->
-          <div class="riwayat-card" data-date="2024-10-10">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-84512</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-10-10')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 12:40 WIB &bull; Kantor Menara Karya (Studio)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 30.000</span>
-                <span class="pay-status">{{ __('riwayat.pay_qris_paid') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>2x Corndog Mini Mozarella</strong> (Saus Sambal)</p>
-                <p><strong>1x Cireng Isi Mini</strong> (Bumbu Tabur Pedas)</p>
-              </div>
-              <span class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.rated') }}
-              </span>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.received_reception') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-84512" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Dibatalkan (2024-10-09) -->
-          <div class="riwayat-card" data-date="2024-10-09">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-84377</h3>
-                  <span class="status-badge cancelled">{{ $rt('status_cancelled', 'Dibatalkan') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-10-09')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 19:05 WIB &bull; Tebet Barat Dalam VI (Rumah Tinggal)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 30.000</span>
-                <span class="pay-status muted">{{ $rt('pay_cancelled', 'Pembayaran dibatalkan') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>3x Corndog Mini Mozarella</strong> (Saus Mayo)</p>
-                <p><strong>1x Ice Good Day Freeze</strong></p>
-              </div>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                {{ $rt('cancelled_note', 'Pesanan dibatalkan sebelum diproses') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Selesai (2024-10-08) -->
-          <div class="riwayat-card" data-date="2024-10-08">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-84105</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-10-08')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 13:10 WIB &bull; Kantor Menara Karya (Studio)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 25.000</span>
-                <span class="pay-status muted">{{ __('riwayat.pay_cod_done') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>2x Corndog Mini Mozarella</strong> (Saos Sambal &amp; Mayo Gurih)</p>
-                <p><strong>1x Cireng Isi Mini</strong> (Bumbu Tabur Original)</p>
-              </div>
-              <span class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.rated') }}
-              </span>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.received_reception') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-84105" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Selesai (2024-10-06) -->
-          <div class="riwayat-card" data-date="2024-10-06">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-83840</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-10-06')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 15:45 WIB &bull; Kantor Menara Karya (Studio)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 45.000</span>
-                <span class="pay-status">{{ __('riwayat.pay_qris_paid') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>3x Corndog Mini Mozarella</strong> (Saus Sambal)</p>
-                <p><strong>2x Cireng Isi Mini</strong> (Bumbu Tabur Pedas)</p>
-                <p><strong>2x Pop Ice Chocolate</strong></p>
-              </div>
-              <span class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.rated') }}
-              </span>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.received_reception') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-83840" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Selesai (2024-10-04) -->
-          <div class="riwayat-card" data-date="2024-10-04">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-83422</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-10-04')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 18:20 WIB &bull; Tebet Barat Dalam VI (Rumah Tinggal)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 20.000</span>
-                <span class="pay-status">{{ $rt('pay_va_paid', 'Virtual Account &bull; Lunas') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>2x Corndog Mini Mozarella</strong> (Saus Mayo)</p>
-                <p><strong>1x Pop Ice Chocolate</strong></p>
-              </div>
-              <span class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.rated') }}
-              </span>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.received_reception') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-83422" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Selesai (2024-10-03) -->
-          <div class="riwayat-card" data-date="2024-10-03">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-83091</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-10-03')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 12:15 WIB &bull; Kantor Menara Karya (Studio)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 35.000</span>
-                <span class="pay-status muted">{{ __('riwayat.pay_cod_done') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>2x Corndog Mini Mozarella</strong> (Saus Sambal)</p>
-                <p><strong>1x Cireng Isi Mini + 2x Pop Ice Chocolate</strong></p>
-              </div>
-              <a href="/form-pesanan?pesanan=2DA-83091" class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.write_review') }}
-              </a>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.invoice_no') }} INV/20241003/2DA/83091
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-83091" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Selesai (2024-10-01) -->
-          <div class="riwayat-card" data-date="2024-10-01">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-82764</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-10-01')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 20:00 WIB &bull; Tebet Barat Dalam VI (Rumah Tinggal)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 15.000</span>
-                <span class="pay-status">{{ __('riwayat.pay_qris_paid') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>1x Cireng Isi Mini</strong> (Bumbu Tabur Pedas)</p>
-                <p><strong>1x Ice Good Day Freeze</strong> (Extra Ice)</p>
-              </div>
-              <span class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.rated') }}
-              </span>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.received_reception') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-82764" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Selesai (2024-09-28) -->
-          <div class="riwayat-card" data-date="2024-09-28">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-82310</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-09-28')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 13:30 WIB &bull; Kantor Menara Karya (Studio)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 40.000</span>
-                <span class="pay-status">{{ __('riwayat.pay_qris_paid') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>4x Corndog Mini Mozarella</strong> (Saus Sambal)</p>
-                <p><strong>2x Ice Good Day Freeze</strong> (Extra Ice)</p>
-              </div>
-              <span class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.rated') }}
-              </span>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.received_reception') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-82310" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Dibatalkan (2024-09-26) -->
-          <div class="riwayat-card" data-date="2024-09-26">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-81985</h3>
-                  <span class="status-badge cancelled">{{ $rt('status_cancelled', 'Dibatalkan') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-09-26')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 17:50 WIB &bull; Tebet Barat Dalam VI (Rumah Tinggal)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 25.000</span>
-                <span class="pay-status muted">{{ $rt('pay_cancelled', 'Pembayaran dibatalkan') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>1x Corndog Mini Mozarella</strong> (Saos Sambal &amp; Mayo Gurih)</p>
-                <p><strong>2x Cireng Isi Mini</strong> (Bumbu Tabur Original)</p>
-              </div>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                {{ $rt('cancelled_note', 'Pesanan dibatalkan sebelum diproses') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Selesai (2024-09-23) -->
-          <div class="riwayat-card" data-date="2024-09-23">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-81530</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-09-23')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 11:45 WIB &bull; Kantor Menara Karya (Studio)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 30.000</span>
-                <span class="pay-status">{{ __('riwayat.pay_qris_paid') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>2x Corndog Mini Mozarella</strong> (Saus Mayo)</p>
-                <p><strong>1x Cireng Isi Mini</strong></p>
-                <p><strong>1x Pop Ice Chocolate</strong></p>
-              </div>
-              <span class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.rated') }}
-              </span>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.received_reception') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-81530" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Selesai (2024-09-17) -->
-          <div class="riwayat-card" data-date="2024-09-17">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-80642</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-09-17')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 14:00 WIB &bull; Kantor Menara Karya (Studio)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 35.000</span>
-                <span class="pay-status">{{ __('riwayat.pay_qris_paid') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>3x Corndog Mini Mozarella</strong> (Saus Sambal)</p>
-                <p><strong>1x Ice Good Day Freeze</strong></p>
-                <p><strong>1x Cireng Isi Mini</strong></p>
-              </div>
-              <a href="/form-pesanan?pesanan=2DA-80642" class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.write_review') }}
-              </a>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.invoice_no') }} INV/20240917/2DA/80642
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-80642" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pesanan: Selesai (2024-09-09) -->
-          <div class="riwayat-card" data-date="2024-09-09">
-            <div class="riwayat-top">
-              <div>
-                <div class="riwayat-id-row">
-                  <h3>#2DA-79788</h3>
-                  <span class="status-badge success">{{ __('riwayat.status_done') }}</span>
-                </div>
-                <p class="riwayat-meta">{{ \Carbon\Carbon::parse('2024-09-09')->locale(app()->getLocale())->translatedFormat('j M Y') }}, 12:25 WIB &bull; Kantor Menara Karya (Studio)</p>
-              </div>
-              <div class="riwayat-total">
-                <span class="label">{{ __('riwayat.total_bill') }}</span>
-                <span class="value">Rp 40.000</span>
-                <span class="pay-status">{{ __('riwayat.pay_qris_paid') }}</span>
-              </div>
-            </div>
-
-            <div class="riwayat-body">
-              <div class="riwayat-items">
-                <p><strong>3x Corndog Mini Mozarella</strong> (Saos Sambal &amp; Mayo Gurih)</p>
-                <p><strong>2x Cireng Isi Mini</strong> (Bumbu Tabur Original)</p>
-                <p><strong>1x Pop Ice Chocolate</strong></p>
-              </div>
-              <span class="link-review">
-                <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
-                {{ __('riwayat.rated') }}
-              </span>
-            </div>
-
-            <div class="riwayat-footer">
-              <span class="riwayat-invoice-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                {{ __('riwayat.received_reception') }}
-              </span>
-              <div class="riwayat-actions">
-                <a href="/invoice/2DA-79788" class="btn-outline-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  {{ __('riwayat.download_invoice') }}
-                </a>
-                <a href="/menulogin" class="btn-soft-sm">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                  {{ __('riwayat.order_again') }}
-                </a>
-              </div>
-            </div>
-          </div>
-
+@endforelse
           <p class="riwayat-empty" id="riwayatEmpty" hidden>{{ $rt('empty', 'Tidak ada pesanan yang cocok.') }}</p>
 
         </div>
@@ -1118,6 +944,109 @@
   </section>
 
   @include('detail')
+
+  <!-- MODAL: FORM ULASAN -->
+  <div class="modal-ulasan-overlay" id="modalUlasan" hidden>
+    <div class="modal-ulasan" role="dialog" aria-modal="true" aria-labelledby="modalUlasanTitle">
+      <button type="button" class="modal-ulasan-close" data-review-close aria-label="{{ $rt('close', 'Tutup') }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <span class="modal-ulasan-badge">
+        <svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
+        {{ $rt('review_form_badge', 'Form Ulasan') }}
+      </span>
+      <h2 id="modalUlasanTitle">{{ $rt('review_title', 'Beri Ulasan & Penilaian') }}</h2>
+      <p class="modal-ulasan-sub">{{ $rt('order_label', 'Pesanan') }} <strong id="ulasanOrderId">#2DA-00000</strong> &bull; <span id="ulasanOrderDate">-</span></p>
+
+      <div class="modal-ulasan-order">
+        <span class="modal-ulasan-order-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2l1.5 4h9L18 2"/><path d="M3.5 7h17l-1.2 12.2a2 2 0 0 1-2 1.8H6.7a2 2 0 0 1-2-1.8L3.5 7z"/><line x1="9" y1="11" x2="9" y2="15"/><line x1="15" y1="11" x2="15" y2="15"/></svg>
+        </span>
+        <div class="modal-ulasan-order-items" id="ulasanOrderItems"></div>
+        <div class="modal-ulasan-order-total">
+          <span class="value" id="ulasanOrderTotal">Rp 0</span>
+          <span class="count" id="ulasanOrderCount">0 {{ $rt('item_unit', 'ITEM') }}</span>
+        </div>
+      </div>
+
+      <div class="modal-ulasan-block">
+        <p class="modal-ulasan-label center">{{ $rt('review_question', 'Bagaimana pengalaman jajanmu kali ini?') }}</p>
+        <div class="modal-ulasan-stars" id="ulasanStars">
+          @for ($i = 1; $i <= 5; $i++)
+          <button type="button" class="star" data-star="{{ $i }}" aria-label="{{ $i }} bintang">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>
+          </button>
+          @endfor
+        </div>
+        <p class="modal-ulasan-rating-text" id="ulasanRatingText" hidden>
+          <span class="num" id="ulasanRatingNum">0.0</span> &bull; <span id="ulasanRatingLabel"></span>
+        </p>
+        <p class="modal-ulasan-rating-warning" id="ulasanRatingWarning" hidden>{{ $rt('review_rating_required', 'Yuk, kasih bintang dulu ya!') }}</p>
+      </div>
+
+      <div class="modal-ulasan-block">
+        <p class="modal-ulasan-label">{{ $rt('review_tags_label', 'Apa yang paling kamu sukai?') }} <span class="soft">({{ $rt('review_tags_hint', 'Bisa pilih lebih dari satu') }})</span></p>
+        <div class="modal-ulasan-chips" id="ulasanChips">
+          @foreach ([
+            $rt('tag_taste', 'Rasa Juara'),
+            $rt('tag_portion', 'Porsi Pas'),
+            $rt('tag_fresh', 'Masih Panas & Renyah'),
+            $rt('tag_fast', 'Pengantaran Cepat'),
+            $rt('tag_packaging', 'Kemasan Rapi'),
+            $rt('tag_price', 'Harga Ramah di Kantong'),
+          ] as $tag)
+          <button type="button" class="chip" data-chip>
+            <svg class="chip-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            {{ $tag }}
+          </button>
+          @endforeach
+        </div>
+      </div>
+
+      <div class="modal-ulasan-block">
+        <div class="modal-ulasan-label-row">
+          <p class="modal-ulasan-label" style="text-transform:none;letter-spacing:0;">{{ $rt('review_text_label', 'Tulis Ulasan atau Masukan') }} <span class="soft">({{ $rt('optional', 'Opsional') }})</span></p>
+          <span class="modal-ulasan-counter"><span id="ulasanTextCount">0</span>/300</span>
+        </div>
+        <textarea id="ulasanText" maxlength="300" placeholder="{{ $rt('review_text_placeholder', 'Ceritakan pengalaman jajanmu...') }}"></textarea>
+      </div>
+
+      <div class="modal-ulasan-block" style="margin-bottom:0;">
+        <p class="modal-ulasan-label" style="text-transform:none;letter-spacing:0;">{{ $rt('review_photo_label', 'Foto Makanan') }} <span class="soft">({{ $rt('review_photo_hint', 'Maksimal 1 foto') }})</span></p>
+        <div class="modal-ulasan-photos" id="ulasanPhotos">
+          <label class="photo-add" id="ulasanPhotoAdd">
+            <input type="file" accept="image/jpeg,image/png" hidden id="ulasanPhotoInput">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>+ {{ $rt('add', 'Tambah') }}</span>
+          </label>
+          <div class="photo-hint" id="ulasanPhotoHint">
+            <p><strong>{{ $rt('review_photo_formats_label', 'Format yang didukung:') }}</strong> JPG, PNG.</p>
+            <p>{{ $rt('review_photo_note', 'Bantu teman jajan melihat tampilan asli pesananmu!') }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-ulasan-toggle-row">
+        <div>
+          <p class="modal-ulasan-label" style="text-transform:none;letter-spacing:0;">{{ $rt('review_anon_label', 'Kirim Secara Anonim') }}</p>
+          <p class="soft small">{{ $rt('review_anon_note', 'Nama akunmu akan disamarkan menjadi R***a pada ulasan publik') }}</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="ulasanAnonim">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="modal-ulasan-actions">
+        <button type="button" class="btn-outline-sm" data-review-close>{{ $rt('review_later', 'Nanti Saja') }}</button>
+        <button type="button" class="btn-primary-sm" id="ulasanSubmit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          {{ $rt('review_submit', 'Kirim Ulasan') }}
+        </button>
+      </div>
+    </div>
+  </div>
 
 @endsection
 
@@ -1199,6 +1128,10 @@
     var empty     = document.getElementById('riwayatEmpty');
     var status    = 'all';
     var COIN_PER_REVIEW = 10; // koin yang didapat per pesanan yang sudah diulas
+
+    // dipakai oleh modal Form Ulasan supaya total transaksi, badge status, dan koin
+    // langsung ikut ter-update setelah ulasan dikirim
+    window.TwodaRiwayat = { refresh: function () { updateCounts(); } };
 
     // status kartu dibaca dari badge-nya, jadi kartu pesanan baru (dibuat lewat JS) ikut terfilter
     function cardStatus(card) {
@@ -1291,6 +1224,218 @@
     // link "Detail & Invoice" membuka modal, jangan lompat ke atas halaman
     document.querySelectorAll('a[data-modal-open][href="#"]').forEach(function (a) {
       a.addEventListener('click', function (e) { e.preventDefault(); });
+    });
+  })();
+</script>
+<script>
+  // Modal "Form Ulasan" -- dipicu dari link "Tulis Ulasan" di tiap pesanan.
+  // Setelah dikirim, kartu pesanan itu diubah jadi "Sudah diulas" (badge bintang),
+  // disimpan supaya tetap begitu walau halaman dibuka ulang, lalu total transaksi
+  // dan koin (di sidebar akun) dihitung ulang lewat window.TwodaRiwayat.refresh().
+  (function () {
+    var overlay   = document.getElementById('modalUlasan');
+    if (!overlay) return;
+
+    var ratedLabelText = @js($rt('rated', 'Sudah Dinilai'));
+    var starIconSvg = '<svg viewBox="0 0 20 20"><path d="M10 1l2.755 5.91L19 7.64l-4.5 4.386L15.51 18 10 14.911 4.49 18l1.01-5.973L1 7.64l6.245-.73z"/></svg>';
+    var STORE_KEY = 'twoda_reviewed_orders';
+
+    function ratedHTMLFor(rating, label) {
+      var text = ratedLabelText + ': ' + Number(rating).toFixed(1) + (label ? ' (' + label + ')' : '');
+      return starIconSvg + text;
+    }
+
+    var ratingLabels = {
+      1: @js($rt('review_rating_1', 'Kurang Sesuai Selera')),
+      2: @js($rt('review_rating_2', 'Boleh Ditingkatkan')),
+      3: @js($rt('review_rating_3', 'Lumayan Enak')),
+      4: @js($rt('review_rating_4', 'Enak & Memuaskan')),
+      5: @js($rt('review_rating_5', 'Sangat Lezat & Memuaskan!'))
+    };
+
+    var stars       = [].slice.call(document.querySelectorAll('#ulasanStars .star'));
+    var ratingText  = document.getElementById('ulasanRatingText');
+    var ratingNum   = document.getElementById('ulasanRatingNum');
+    var ratingLabel = document.getElementById('ulasanRatingLabel');
+    var ratingWarn  = document.getElementById('ulasanRatingWarning');
+    var chips       = [].slice.call(document.querySelectorAll('#ulasanChips .chip'));
+    var textArea    = document.getElementById('ulasanText');
+    var textCount   = document.getElementById('ulasanTextCount');
+    var photoAdd    = document.getElementById('ulasanPhotoAdd');
+    var photoInput  = document.getElementById('ulasanPhotoInput');
+    var photoWrap   = document.getElementById('ulasanPhotos');
+    var anonim      = document.getElementById('ulasanAnonim');
+    var submitBtn   = document.getElementById('ulasanSubmit');
+
+    var currentRating = 0;
+    var currentCard   = null;
+    var photoCount    = 0;
+
+    function getReviewed() {
+      try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch (e) { return []; }
+    }
+    function saveReviewed(list) {
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch (e) {}
+    }
+    function orderIdOf(card) {
+      var h3 = card.querySelector('.riwayat-id-row h3');
+      return h3 ? h3.textContent.replace('#', '').trim() : '';
+    }
+
+    // ganti link "Tulis Ulasan" jadi span "Sudah Dinilai: x.x (label)" (persis format kartu yang sudah pernah diulas)
+    function markCardReviewed(card, rating, label) {
+      var link = card.querySelector('a.link-review');
+      if (link) {
+        var span = document.createElement('span');
+        span.className = 'link-review';
+        span.innerHTML = ratedHTMLFor(rating, label);
+        link.parentNode.replaceChild(span, link);
+      }
+      if (window.TwodaRiwayat) window.TwodaRiwayat.refresh();
+    }
+
+    // pulihkan status "sudah diulas" dari localStorage saat halaman dibuka lagi
+    // (rating & label ikut disimpan supaya teksnya tetap sama walau halaman dibuka ulang)
+    (function restore() {
+      var reviewed = getReviewed();
+      if (!reviewed.length) return;
+      document.querySelectorAll('.riwayat-card').forEach(function (card) {
+        var found = reviewed.filter(function (r) { return r.id === orderIdOf(card); })[0];
+        if (found) markCardReviewed(card, found.rating, found.label);
+      });
+    })();
+
+    function resetForm() {
+      currentRating = 0;
+      photoCount = 0;
+      renderStars(0);
+      ratingText.hidden = true;
+      ratingWarn.hidden = true;
+      chips.forEach(function (c) { c.classList.remove('selected'); });
+      textArea.value = '';
+      textCount.textContent = '0';
+      anonim.checked = false;
+      photoWrap.querySelectorAll('.photo-thumb').forEach(function (t) { t.remove(); });
+      photoAdd.hidden = false;
+      photoInput.value = '';
+    }
+
+    function renderStars(n) {
+      stars.forEach(function (s) {
+        s.classList.toggle('filled', parseInt(s.dataset.star, 10) <= n);
+      });
+    }
+
+    function openModal(card) {
+      currentCard = card;
+      resetForm();
+
+      var idEl   = document.getElementById('ulasanOrderId');
+      var dateEl = document.getElementById('ulasanOrderDate');
+      var itemsEl = document.getElementById('ulasanOrderItems');
+      var totalEl = document.getElementById('ulasanOrderTotal');
+      var countEl = document.getElementById('ulasanOrderCount');
+
+      idEl.textContent = '#' + orderIdOf(card);
+      var meta = card.querySelector('.riwayat-meta');
+      dateEl.textContent = meta ? meta.textContent.split('\u2022')[0].trim() : '';
+
+      var itemPs = card.querySelectorAll('.riwayat-items p');
+      itemsEl.innerHTML = '';
+      itemPs.forEach(function (p) { itemsEl.appendChild(p.cloneNode(true)); });
+      countEl.textContent = itemPs.length + ' ' + @js($rt('item_unit', 'ITEM'));
+
+      var totalVal = card.querySelector('.riwayat-total .value');
+      totalEl.textContent = totalVal ? totalVal.textContent.trim() : 'Rp 0';
+
+      overlay.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      overlay.hidden = true;
+      document.body.style.overflow = '';
+      currentCard = null;
+    }
+
+    document.querySelectorAll('[data-review-open]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var card = a.closest('.riwayat-card');
+        if (card) openModal(card);
+      });
+    });
+
+    document.querySelectorAll('[data-review-close]').forEach(function (b) {
+      b.addEventListener('click', closeModal);
+    });
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !overlay.hidden) closeModal();
+    });
+
+    stars.forEach(function (s) {
+      s.addEventListener('click', function () {
+        currentRating = parseInt(s.dataset.star, 10);
+        renderStars(currentRating);
+        ratingText.hidden = false;
+        ratingWarn.hidden = true;
+        ratingNum.textContent = currentRating.toFixed(1);
+        ratingLabel.textContent = ratingLabels[currentRating] || '';
+      });
+    });
+
+    chips.forEach(function (c) {
+      c.addEventListener('click', function () { c.classList.toggle('selected'); });
+    });
+
+    textArea.addEventListener('input', function () {
+      textCount.textContent = textArea.value.length;
+    });
+
+    photoAdd.addEventListener('click', function (e) {
+      if (photoCount >= 1) e.preventDefault();
+    });
+    photoInput.addEventListener('change', function () {
+      [].slice.call(photoInput.files).forEach(function (file) {
+        if (photoCount >= 1 || !/^image\/(jpeg|png)$/.test(file.type)) return;
+        photoCount++;
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+          var thumb = document.createElement('div');
+          thumb.className = 'photo-thumb';
+          thumb.innerHTML = '<img src="' + ev.target.result + '" alt="">' +
+            '<button type="button" aria-label="{{ $rt('remove', 'Hapus') }}">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+          thumb.querySelector('button').addEventListener('click', function () {
+            thumb.remove();
+            photoCount--;
+            photoAdd.hidden = false;
+          });
+          photoWrap.insertBefore(thumb, photoAdd);
+          if (photoCount >= 1) photoAdd.hidden = true;
+        };
+        reader.readAsDataURL(file);
+      });
+      photoInput.value = '';
+    });
+
+    submitBtn.addEventListener('click', function () {
+      if (!currentRating) {
+        ratingWarn.hidden = false;
+        return;
+      }
+      if (currentCard) {
+        var id = orderIdOf(currentCard);
+        var label = ratingLabels[currentRating] || '';
+        markCardReviewed(currentCard, currentRating, label);
+        var reviewed = getReviewed().filter(function (r) { return r.id !== id; });
+        reviewed.push({ id: id, rating: currentRating, label: label });
+        saveReviewed(reviewed);
+      }
+      closeModal();
     });
   })();
 </script>

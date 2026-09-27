@@ -1,26 +1,4 @@
 <?php
-
-/*
-|--------------------------------------------------------------------------
-| Data menu 2DA Store (satu sumber data untuk katalog & detail produk)
-|--------------------------------------------------------------------------
-| Key array = slug produk, dipakai di URL: /produklogin?p={slug}
-|
-| Field wajib : name, img, rating, reviews, price, cats, desc
-| Field opsional (dipakai halaman detail):
-|   detail   : deskripsi panjang (boleh pakai <strong>). Kalau kosong -> pakai desc
-|   sold     : teks jumlah terjual, mis. '1.200+'
-|   puas     : persentase puas, mis. '99%'
-|   options  : grup pilihan (radio / checkbox) beserta harga tambahan
-|               (opsional per grup: 'hint' = teks kecil di bawah judul grup pada pop-up)
-| Kalau field opsional tidak diisi, bagiannya otomatis tidak ditampilkan.
-|
-| CATATAN: pilihan saus/topping untuk produk selain Corndog di bawah ini
-| adalah CONTOH. Silakan ubah nama & harga tambahannya sesuai menu asli.
-*/
-
-// ---------- Grup opsi yang dipakai bersama ----------
-
 // Makanan gurih (sama seperti Corndog)
 $sausGurih = [
     'title' => 'Pilihan Saus / Taburan',
